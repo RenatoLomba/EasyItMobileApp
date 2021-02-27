@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const BASE_API = 'http://192.168.15.132:5000/api/';
+const BASE_API = 'http://192.168.0.27:5000/api/';
 // 192.168.15.132 --> SEEGER
-// 192.168.0.28 --> OSVALDO
+// 192.168.0.27 --> OSVALDO
 // 192.168.0.102 --> CASA
 
 export default {
@@ -66,4 +66,15 @@ export default {
         const json = await req.json();
         return json;
     },
+    searchService: async (name, qtd, order) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}services/name/${name}/${qtd}/${order}`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+        const json = await req.json();
+        return json;
+    }
 };

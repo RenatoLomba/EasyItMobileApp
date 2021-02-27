@@ -64,14 +64,12 @@ const SignUp = () => {
                         },
                     });
 
-                    console.log(response);
-
-                    // userDispatcher({
-                    //     type: 'setAppointments',
-                    //     payload: {
-                    //         appointments: response
-                    //     }
-                    // });
+                    userDispatcher({
+                        type: 'setAppointments',
+                        payload: {
+                            appointments: response
+                        }
+                    });
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

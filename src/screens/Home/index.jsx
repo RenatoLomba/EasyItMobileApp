@@ -23,7 +23,7 @@ import ExpertItem from '../../components/ExpertItem';
 import SearchIcon from '../../assets/search.svg';
 import MyLocationIcon from '../../assets/my_location.svg';
 
-export default () => {
+const Home = () => {
     const navigator = useNavigation();
     const [location, setLocation] = useState('');
     const [showLoading, setShowLoading] = useState(false);
@@ -131,3 +131,5 @@ export default () => {
         </Container>
     );
 };
+export default Home;
+Home.displayName = 'Home';

@@ -36,14 +36,12 @@ const Preload = () => {
                         },
                     });
 
-                    console.log(response);
-
-                    // userDispatcher({
-                    //     type: 'setAppointments',
-                    //     payload: {
-                    //         appointments: response
-                    //     }
-                    // });
+                    userDispatcher({
+                        type: 'setAppointments',
+                        payload: {
+                            appointments: response.appointments
+                        }
+                    });
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]
