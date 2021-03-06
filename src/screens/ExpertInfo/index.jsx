@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
 import {
     Container,
     Scroller,
@@ -46,6 +46,7 @@ import Api from '../../Api';
 
 export default () => {
     const navigator = useNavigation();
+    const { state: userState, dispatch: userDispatcher } = useContext(UserContext);
     const router = useRoute();
 
     const [expertInfo, setExpertInfo] = useState({ ...router.params });
@@ -54,32 +55,77 @@ export default () => {
     const [selectedService, setSelectedService] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => {
-        const getExpertCompleteInfo = async () => {
-            setShowLoading(true);
-            try {
-                const response = await Api.getExpertComplete(expertInfo.id);
-                if (response.id) {
-                    // console.log(response);
-                    setExpertInfo(response);
-                    // setFavorited(response.favorited);
-                } else {
-                    alert(response);
-                }
-            } catch (err) {
-                alert(err.message);
-                navigator.reset({
-                    routes: [{ name: 'Home' }]
-                });
-            } finally {
-                setShowLoading(false);
+    const [favoriteId, setFavoriteId] = useState('');
+
+    const getExpertCompleteInfo = async () => {
+        setShowLoading(true);
+        try {
+            const response = await Api.getExpertComplete(expertInfo.id);
+            if (response.id) {
+                setExpertInfo(response);
+            } else {
+                alert(response);
             }
-        };
+        } catch (err) {
+            alert(err.message);
+            navigator.reset({
+                routes: [{ name: 'Home' }]
+            });
+        } finally {
+            setShowLoading(false);
+        }
+    };
+
+    const isFavorite = async () => {
+        setShowLoading(true);
+        try {
+            const response = await Api.isFavorite(userState.id, expertInfo.id);
+            if (response) {
+                setFavoriteId(response.id);
+                setFavorited(response);
+            } else {
+                setFavorited(false);
+            }
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setShowLoading(false);
+        }
+    }
+
+    useEffect(() => {
         getExpertCompleteInfo();
+        isFavorite();
     }, []);
 
-    const handleFavButton = () => {
-        setFavorited(!favorited);
+    const handleFavButton = async () => {
+        setShowLoading(true);
+        try {
+            const response = favorited ? await Api.removeFavorite(favoriteId) : await Api.addFavorite(userState.id, expertInfo.id);
+            if (response) {
+                let favorites = [...userState.favorites];
+                if (response.id) {
+                    favorites.push(response);
+                    setFavoriteId(response.id);
+                } else {
+                    favorites.splice(favorites.findIndex(v => v.id === favoriteId));
+                    setFavoriteId('');
+                }
+                userDispatcher({
+                    type: 'setFavorites',
+                    payload: {
+                        favorites
+                    }
+                });
+                setFavorited(!favorited);
+            } else {
+                alert(response);
+            }
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setShowLoading(false);
+        }
     };
 
     const handleServiceChooseButton = (service) => {

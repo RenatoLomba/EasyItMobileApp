@@ -35,7 +35,6 @@ const Search = () => {
     const searchServices = async () => {
         setShowLoading(true);
         try {
-            console.log(searchText, take, selectedOrder);
             const servicesResult =
                 await Api.searchService(searchText === '' ? ' ' : searchText, take, selectedOrder === '' ? 'default' : selectedOrder);
             setServices(servicesResult);

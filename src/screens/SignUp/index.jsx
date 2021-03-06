@@ -63,11 +63,16 @@ const SignUp = () => {
                             id: response.id,
                         },
                     });
-
                     userDispatcher({
                         type: 'setAppointments',
                         payload: {
-                            appointments: response
+                            appointments: response.appointments
+                        }
+                    });
+                    userDispatcher({
+                        type: 'setFavorites',
+                        payload: {
+                            favorites: response.favorites
                         }
                     });
 

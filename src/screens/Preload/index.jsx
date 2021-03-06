@@ -35,18 +35,22 @@ const Preload = () => {
                             id: response.id,
                         },
                     });
-
                     userDispatcher({
                         type: 'setAppointments',
                         payload: {
                             appointments: response.appointments
                         }
                     });
+                    userDispatcher({
+                        type: 'setFavorites',
+                        payload: {
+                            favorites: response.favorites
+                        }
+                    });
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]
                     });
-                    // navigator.navigate('SignIn');
                 } else {
                     navigator.navigate('SignIn');
                 }

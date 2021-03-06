@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const BASE_API = 'http://192.168.0.27:5000/api/';
+const BASE_API = 'http://192.168.0.28:5000/api/';
 // 192.168.15.132 --> SEEGER
-// 192.168.0.27 --> OSVALDO
+// 192.168.0.28 --> OSVALDO
 // 192.168.0.102 --> CASA
 
 export default {
@@ -76,5 +76,52 @@ export default {
         });
         const json = await req.json();
         return json;
-    }
+    },
+    removeAppointment: async (id) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}appointments/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+        const json = await req.json();
+        return json;
+    },
+    addFavorite: async (userId, expertId) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}favorites/create`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+            body: JSON.stringify({userId, expertId})
+        });
+        const json = await req.json();
+        return json;
+    },
+    removeFavorite: async (id) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}favorites/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+        const json = await req.json();
+        return json;
+    },
+    isFavorite: async (userId, expertId) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}favorites/findrelation/${userId}/${expertId}`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+        const res = req.status !== 404 ? await req.json() : false;
+        return res;
+    },
 };

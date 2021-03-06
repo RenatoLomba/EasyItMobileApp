@@ -12,7 +12,9 @@ export const UserReducer = (state, action) => {
         case 'setId':
             return { ...state, id: action.payload.id };
         case 'setAppointments':
-            return { ...state, appointments: [...state.appointments, ...action.payload.appointments] }
+            return { ...state, appointments: action.payload.appointments };
+        case 'setFavorites':
+            return { ...state, favorites: action.payload.favorites };
         default:
             return state;
     };

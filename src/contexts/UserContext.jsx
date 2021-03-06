@@ -3,7 +3,8 @@ import { initialState, UserReducer } from '../reducers/UserReducer';
 
 export const UserContext = createContext();
 
-export default ({ children }) => {
+// eslint-disable-next-line react/prop-types
+const UserContextArea = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, initialState);
 
     return (
@@ -12,3 +13,5 @@ export default ({ children }) => {
         </UserContext.Provider>
     );
 };
+export default UserContextArea;
+UserContextArea.displayName = 'UserContextArea';

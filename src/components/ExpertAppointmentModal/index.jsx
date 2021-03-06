@@ -42,7 +42,8 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }) => {
-    const { state: userState } = useContext(UserContext);
+    const { state: userState, dispatch: userDispatcher } = useContext(UserContext);
+    const navigator = useNavigation();
 
     const [listDays, setListDays] = useState([]);
     const [listHours, setListHours] = useState([]);
@@ -123,11 +124,21 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
             }
         }
         try {
-            // const response = await Api.registerAppointment(appointmentDTOCreate);
-            const response = { id: '123456' };
-            console.log(appointmentDTOCreate);
+            const response = await Api.registerAppointment(appointmentDTOCreate);
+            let appointments = [...userState.appointments];
             if (response.id) {
+                appointments.push(response);
                 alert('Agendamento cadastrado com sucesso!');
+                userDispatcher({
+                    type: 'setAppointments',
+                    payload: {
+                        appointments
+                    }
+                });
+
+                navigator.reset({
+                    routes: [{ name: 'MainTab' }]
+                });
             } else {
                 alert(response);
             }
