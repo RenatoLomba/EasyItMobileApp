@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import React, { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import styled from 'styled-components/native';
-import base64 from 'react-native-base64';
+// import base64 from 'react-native-base64';
 
 import HomeIcon from '../assets/home.svg';
 import SearchIcon from '../assets/search.svg';
@@ -9,9 +10,11 @@ import TodayIcon from '../assets/today.svg';
 import FavoriteIcon from '../assets/favorite.svg';
 import AccountIcon from '../assets/account.svg';
 
+import configs from '../appconfigs.json';
+
 const TabArea = styled.View`
     height: 60px;
-    background-color: #16A286;
+    background-color: ${configs.colors['slightly-darker']};
     flex-direction: row;
 `;
 
@@ -26,7 +29,7 @@ const TabItemCenter = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     background-color: #FFFFFF;
-    border: 3px solid #16A286;
+    border: 3px solid ${configs.colors['slightly-darker']};
     border-radius: 35px;
     margin-top: -32px;
 `;
@@ -37,8 +40,9 @@ const AvatarIcon = styled.Image`
     border-radius: 12px;
 `;
 
-export default ({ state, navigation }) => {
-    const { state: userState } = useContext(UserContext);
+// eslint-disable-next-line react/prop-types
+const CustomTabBar = ({ state, navigation }) => {
+    const { userAvatar } = useContext(UserContext);
 
     const goTo = (screenName) => {
         navigation.navigate(screenName);
@@ -53,16 +57,16 @@ export default ({ state, navigation }) => {
                 <SearchIcon style={{ opacity: state.index === 1 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
             </TabItem>
             <TabItemCenter onPress={() => goTo("Appointments")}>
-                <TodayIcon width="32" height="32" fill="#16A286" />
+                <TodayIcon width="32" height="32" fill={configs.colors['slightly-darker']} />
             </TabItemCenter>
             <TabItem onPress={() => goTo("Favorites")}>
                 <FavoriteIcon style={{ opacity: state.index === 3 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
             </TabItem>
             <TabItem onPress={() => goTo("Profile")}>
-                {userState.avatar != '' && userState.avatar != null ?
+                {userAvatar != '' && userAvatar != null ?
                     <AvatarIcon
                         source={{
-                            uri: userState.avatar,
+                            uri: userAvatar,
                         }}
                     /> :
                     <AccountIcon style={{ opacity: state.index === 4 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
@@ -71,3 +75,5 @@ export default ({ state, navigation }) => {
         </TabArea>
     );
 };
+export default CustomTabBar;
+CustomTabBar.displayName = 'CustomTabBar';

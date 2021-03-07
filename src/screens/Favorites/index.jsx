@@ -13,15 +13,23 @@ import {
 import ExpertItem from '../../components/ExpertItem';
 
 const Favorites = () => {
-    const { state: userState } = useContext(UserContext);
+    const { userFavorites } = useContext(UserContext);
     const [showLoading, setShowLoading] = useState(false);
     const [favoritesList, setFavorites] = useState([]);
 
+    const [reloadState, setReload] = useState(false);
+
     useEffect(() => {
         setShowLoading(true);
-        setFavorites(userState.favorites);
+        setFavorites(userFavorites);
         setShowLoading(false);
     }, []);
+
+    useEffect(() => {
+        setShowLoading(true);
+        setFavorites(userFavorites);
+        setShowLoading(false);
+    }, [userFavorites]);
 
     return (
         <Container>

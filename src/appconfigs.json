@@ -1,0 +1,10 @@
+{
+    "colors": {
+        "primary": "#1ABC9C",
+        "darker": "#117864",
+        "lighter": "#76D7C4",
+        "slightly-darker": "#16A286",
+        "yellow-star": "#FF9200",
+        "red-wine": "#F21040"
+    }
+}

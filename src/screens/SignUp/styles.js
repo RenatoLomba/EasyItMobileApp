@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Container = styled.SafeAreaView`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     flex: 1;
     justify-content: center;
     align-items: center;
@@ -14,7 +15,7 @@ export const InputArea = styled.View`
 
 export const CustomButton = styled.TouchableOpacity`
     height: 60px;
-    background-color: #117864;
+    background-color: ${configs.colors.darker};
     border-radius: 30px;
     justify-content: center;
     align-items: center;

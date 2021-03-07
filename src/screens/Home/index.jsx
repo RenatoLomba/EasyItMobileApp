@@ -3,7 +3,8 @@ import { Platform, RefreshControl, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-//import Geolocation from '@react-native-community/geolocation';
+import { motion } from 'framer-motion';
+//import Geolocation from '@r00eact-native-community/geolocation';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import {
     Container,

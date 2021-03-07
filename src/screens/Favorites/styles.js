@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Container = styled.SafeAreaView`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     flex: 1;
 `;
 export const Scroller = styled.ScrollView`

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../appconfigs.json';
 
 const InputArea = styled.View`
     width: 100%;
@@ -9,7 +10,7 @@ const InputArea = styled.View`
     padding-left: 15px;
     align-items: center;
     margin-bottom: 15px;
-    background-color: #76D7C4;
+    background-color: ${configs.colors.lighter};
 `;
 const Input = styled.TextInput`
     flex: 1;
@@ -18,7 +19,8 @@ const Input = styled.TextInput`
     margin-left: 10px;
 `;
 
-export default ({ IconSvg, ...props }) => {
+// eslint-disable-next-line react/prop-types
+const SignInput = ({ IconSvg, ...props }) => {
     return (
         <InputArea>
             <IconSvg width="24" height="24" fill="#fff" />
@@ -28,3 +30,5 @@ export default ({ IconSvg, ...props }) => {
         </InputArea>
     );
 };
+export default SignInput;
+SignInput.displayName = 'SignInput';

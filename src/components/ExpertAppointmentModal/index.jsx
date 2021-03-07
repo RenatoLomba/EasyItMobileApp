@@ -38,11 +38,13 @@ import ExpandIcon from '../../assets/expand.svg';
 import NavPrevIcon from '../../assets/nav_prev.svg';
 import NavNextIcon from '../../assets/nav_next.svg';
 
+import configs from '../../appconfigs.json';
+
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }) => {
-    const { state: userState, dispatch: userDispatcher } = useContext(UserContext);
+    const { userId, userAppointments, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
     const [listDays, setListDays] = useState([]);
@@ -111,7 +113,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
     const handleFinishButton = async () => {
         setShowLoading(true);
         const appointmentDTOCreate = {
-            userid: userState.id,
+            userid: userId,
             expertid: expertInfo.id,
             serviceid: service.id,
             dateinfo: {
@@ -123,18 +125,16 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
                 availablehourid: selectedHour.id
             }
         }
+
+        console.log(appointmentDTOCreate);
         try {
             const response = await Api.registerAppointment(appointmentDTOCreate);
-            let appointments = [...userState.appointments];
+            let appointments = [...userAppointments];
             if (response.id) {
                 appointments.push(response);
                 alert('Agendamento cadastrado com sucesso!');
-                userDispatcher({
-                    type: 'setAppointments',
-                    payload: {
-                        appointments
-                    }
-                });
+
+                appointmentsDispatch(appointments);
 
                 navigator.reset({
                     routes: [{ name: 'MainTab' }]
@@ -233,7 +233,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
                                             key={key}
                                             style={{
                                                 backgroundColor: selectedHour && selectedHour.hour === hourItem.hour && selectedHour.minutes === hourItem.minutes ?
-                                                    "#1ABC9C" : "#FFF",
+                                                    configs.colors.primary : "#FFF",
                                             }}
                                             onPress={() => handleHourSelectButton(hourItem)}
                                         >

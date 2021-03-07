@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Modal = styled.Modal``;
 export const ModalArea = styled.View`
@@ -8,7 +9,7 @@ export const ModalArea = styled.View`
     justify-content: flex-end;
 `;
 export const ModalBody = styled.View`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     min-height: 300px;
@@ -59,7 +60,7 @@ export const ModalServicePrice = styled.Text`
 `;
 
 export const FinishAppointmentButton = styled.TouchableOpacity`
-    background-color: #117864;
+    background-color: ${configs.colors.darker};
     justify-content: center;
     align-items: center;
     border-radius: 15px;

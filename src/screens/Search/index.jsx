@@ -16,6 +16,7 @@ import {
 } from './styles';
 import Api from '../../Api';
 import ExpertItem from '../../components/ExpertItem';
+import configs from '../../appconfigs.json';
 
 import SearchIcon from '../../assets/search.svg';
 
@@ -76,12 +77,12 @@ const Search = () => {
                             <OrderByButton
                                 key={`order__${key}`}
                                 style={{
-                                    backgroundColor: selectedOrder === order.value ? '#fff' : '#FF9200'
+                                    backgroundColor: selectedOrder === order.value ? '#fff' : configs.colors['yellow-star']
                                 }}
                                 onPress={() => setSelectedOrder(order.value)}
                             >
                                 <OrderByButtonText
-                                    style={{ color: selectedOrder === order.value ? '#FF9200' : '#fff' }}
+                                    style={{ color: selectedOrder === order.value ? configs.colors['yellow-star'] : '#fff' }}
                                 >{order.text}</OrderByButtonText>
                             </OrderByButton>
                         )

@@ -22,34 +22,37 @@ import {
 import Api from '../../Api';
 import TrashIcon from '../../assets/trash.svg';
 
+import configs from '../../appconfigs.json';
+
 const Appointments = () => {
-    const { state: userState, dispatch: userDispatcher } = useContext(UserContext);
+    const { userAppointments, appointmentsDispatch } = useContext(UserContext);
     const [appointmentsList, setAppointmentsList] = useState([]);
     const [showLoading, setShowLoading] = useState(false);
 
-    useState(() => {
+    useEffect(() => {
         setShowLoading(true);
-        setAppointmentsList(userState.appointments);
+        setAppointmentsList(userAppointments);
         setShowLoading(false);
     }, []);
+
+    useEffect(() => {
+        setShowLoading(true);
+        setAppointmentsList(userAppointments);
+        setShowLoading(false);
+    }, [userAppointments])
 
     const handleRemoveAppointmentButton = async (id, key) => {
         setShowLoading(true);
         try {
             const response = await Api.removeAppointment(id);
             if (response) {
-                let appointments = [...userState.appointments];
+                let appointments = [...userAppointments];
                 // appointments.slice(key, 1);
                 appointments.splice(appointments.findIndex(v => v.id === id));
 
                 setAppointmentsList(appointments);
+                appointmentsDispatch(appointments);
 
-                userDispatcher({
-                    type: 'setAppointments',
-                    payload: {
-                        appointments
-                    }
-                });
                 alert('Agendamento removido com sucesso.');
             } else {
                 alert('Ocorreu um erro, o agendamento não foi removido');
@@ -85,7 +88,7 @@ const Appointments = () => {
                                         <RemoveAppointmentButton
                                             onPress={() => handleRemoveAppointmentButton(appointment.id, key)}
                                         >
-                                            <TrashIcon width="20" height="20" fill="#f50045" />
+                                            <TrashIcon width="20" height="20" fill={configs.colors['red-wine']} />
                                         </RemoveAppointmentButton>
                                     </CardHeader>
                                     <ServiceName>{appointment.service.name}</ServiceName>

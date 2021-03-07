@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
 import StarsComponent from './StarsComponent';
+
+import configs from '../appconfigs.json';
 
 const Area = styled.TouchableOpacity`
     background-color: #fff;
@@ -25,7 +28,7 @@ const UserName = styled.Text`
     font-weight: bold;
 `;
 const SeeProfileButton = styled.View`
-    border: 1px solid #1ABC9C;
+    border: 1px solid ${configs.colors.primary};
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -34,7 +37,7 @@ const SeeProfileButton = styled.View`
 `;
 const SeeProfileButtonText = styled.Text`
     font-size: 13px;
-    color: #1ABC9C;
+    color: ${configs.colors.primary};
 `;
 
 const ExpertItem = ({ data }) => {
@@ -67,5 +70,5 @@ const ExpertItem = ({ data }) => {
         </Area>
     );
 };
-
 export default ExpertItem;
+ExpertItem.displayName = 'ExpertItem';

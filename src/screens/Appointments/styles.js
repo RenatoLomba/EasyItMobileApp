@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Container = styled.SafeAreaView`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     flex: 1;
 `;
 export const Scroller = styled.ScrollView`
@@ -69,7 +70,7 @@ export const Date = styled.Text`
     margin-top: 3px;
 `;
 export const SeeProfileButton = styled.View`
-    border: 1px solid #1ABC9C;
+    border: 1px solid ${configs.colors.primary};
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -79,7 +80,7 @@ export const SeeProfileButton = styled.View`
 `;
 export const SeeProfileButtonText = styled.Text`
     font-size: 13px;
-    color: #1ABC9C;
+    color: ${configs.colors.primary};
 `;
 
 export const LoadingIcon = styled.ActivityIndicator`

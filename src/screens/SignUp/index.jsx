@@ -23,7 +23,7 @@ import LockIcon from '../../assets/lock.svg';
 import PersonIcon from '../../assets/person.svg';
 
 const SignUp = () => {
-    const { dispatch: userDispatcher } = useContext(UserContext);
+    const { idDispatch, avatarDispatch, favoritesDispatch, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -51,30 +51,35 @@ const SignUp = () => {
                     await AsyncStorage.setItem('email', email);
                     await AsyncStorage.setItem('password', password);
 
-                    userDispatcher({
-                        type: 'setAvatar',
-                        payload: {
-                            avatar: response.avatar,
-                        },
-                    });
-                    userDispatcher({
-                        type: 'setId',
-                        payload: {
-                            id: response.id,
-                        },
-                    });
-                    userDispatcher({
-                        type: 'setAppointments',
-                        payload: {
-                            appointments: response.appointments
-                        }
-                    });
-                    userDispatcher({
-                        type: 'setFavorites',
-                        payload: {
-                            favorites: response.favorites
-                        }
-                    });
+                    idDispatch(response.id);
+                    avatarDispatch(response.avatar);
+                    favoritesDispatch(response.favorites);
+                    appointmentsDispatch(response.appointments);
+
+                    // userDispatcher({
+                    //     type: 'setAvatar',
+                    //     payload: {
+                    //         avatar: response.avatar,
+                    //     },
+                    // });
+                    // userDispatcher({
+                    //     type: 'setId',
+                    //     payload: {
+                    //         id: response.id,
+                    //     },
+                    // });
+                    // userDispatcher({
+                    //     type: 'setAppointments',
+                    //     payload: {
+                    //         appointments: response.appointments
+                    //     }
+                    // });
+                    // userDispatcher({
+                    //     type: 'setFavorites',
+                    //     payload: {
+                    //         favorites: response.favorites
+                    //     }
+                    // });
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

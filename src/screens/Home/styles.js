@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Container = styled.SafeAreaView`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     flex: 1;
 `;
 export const Scroller = styled.ScrollView`
@@ -28,7 +29,7 @@ export const SearchButton = styled.TouchableOpacity`
 `;
 
 export const LocationArea = styled.View`
-    background-color: #16A286;
+    background-color: ${configs.colors['slightly-darker']};
     height: 60px;
     border-radius: 30px;
     flex-direction: row;

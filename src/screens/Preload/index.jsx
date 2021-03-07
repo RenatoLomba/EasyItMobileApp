@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import Api from '../../Api';
 
 const Preload = () => {
-    const { dispatch: userDispatcher } = useContext(UserContext);
+    const { idDispatch, avatarDispatch, favoritesDispatch, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
     //CHECK O TOKEN PARA SIGN IN, CASO CONTRÁRIO SIGN UP
@@ -23,30 +23,10 @@ const Preload = () => {
                     await AsyncStorage.setItem('email', email);
                     await AsyncStorage.setItem('password', password);
 
-                    userDispatcher({
-                        type: 'setAvatar',
-                        payload: {
-                            avatar: response.avatar,
-                        },
-                    });
-                    userDispatcher({
-                        type: 'setId',
-                        payload: {
-                            id: response.id,
-                        },
-                    });
-                    userDispatcher({
-                        type: 'setAppointments',
-                        payload: {
-                            appointments: response.appointments
-                        }
-                    });
-                    userDispatcher({
-                        type: 'setFavorites',
-                        payload: {
-                            favorites: response.favorites
-                        }
-                    });
+                    idDispatch(response.id);
+                    avatarDispatch(response.avatar);
+                    favoritesDispatch(response.favorites);
+                    appointmentsDispatch(response.appointments);
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

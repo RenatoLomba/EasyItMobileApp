@@ -44,9 +44,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 import Api from '../../Api';
 
+import configs from '../../appconfigs.json';
+
 export default () => {
     const navigator = useNavigation();
-    const { state: userState, dispatch: userDispatcher } = useContext(UserContext);
+    const { userId, userFavorites, favoritesDispatch } = useContext(UserContext);
     const router = useRoute();
 
     const [expertInfo, setExpertInfo] = useState({ ...router.params });
@@ -79,7 +81,7 @@ export default () => {
     const isFavorite = async () => {
         setShowLoading(true);
         try {
-            const response = await Api.isFavorite(userState.id, expertInfo.id);
+            const response = await Api.isFavorite(userId, expertInfo.id);
             if (response) {
                 setFavoriteId(response.id);
                 setFavorited(response);
@@ -101,9 +103,10 @@ export default () => {
     const handleFavButton = async () => {
         setShowLoading(true);
         try {
-            const response = favorited ? await Api.removeFavorite(favoriteId) : await Api.addFavorite(userState.id, expertInfo.id);
+            const response = favorited ? await Api.removeFavorite(favoriteId) : await Api.addFavorite(userId, expertInfo.id);
+
             if (response) {
-                let favorites = [...userState.favorites];
+                let favorites = [...userFavorites];
                 if (response.id) {
                     favorites.push(response);
                     setFavoriteId(response.id);
@@ -111,12 +114,9 @@ export default () => {
                     favorites.splice(favorites.findIndex(v => v.id === favoriteId));
                     setFavoriteId('');
                 }
-                userDispatcher({
-                    type: 'setFavorites',
-                    payload: {
-                        favorites
-                    }
-                });
+
+                favoritesDispatch(favorites);
+
                 setFavorited(!favorited);
             } else {
                 alert(response);
@@ -180,14 +180,14 @@ export default () => {
                         </ExpertInfo>
                         <ExpertFavButton onPress={handleFavButton}>
                             {favorited ?
-                                <FavoriteFullIcon width="24" height="24" fill="#FF00FF" />
+                                <FavoriteFullIcon width="24" height="24" fill={configs.colors['red-wine']} />
                                 :
-                                <FavoriteIcon width="24" height="24" fill="#FF00FF" />
+                                <FavoriteIcon width="24" height="24" fill={configs.colors['red-wine']} />
                             }
                         </ExpertFavButton>
                     </ExpertInfoArea>
 
-                    {showLoading && <LoadingIcon size="large" color="#1ABC9C" />}
+                    {showLoading && <LoadingIcon size="large" color={configs.colors.primary} />}
 
                     {expertInfo.services &&
                         <ServicesListArea>

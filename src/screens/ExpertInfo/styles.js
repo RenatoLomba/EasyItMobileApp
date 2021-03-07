@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import configs from '../../appconfigs.json';
 
 export const Container = styled.View`
     flex: 1;
@@ -19,7 +20,7 @@ export const SwipeDot = styled.View`
 `;
 
 export const SwipeItem = styled.View`
-    background-color: #1ABC9C;
+    background-color: ${configs.colors.primary};
     flex: 1;
 `;
 export const SwipeImage = styled.Image`
@@ -70,7 +71,7 @@ export const ExpertFavButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     align-self: center;
-    border: 2px solid #FF00FF;
+    border: 2px solid ${configs.colors['red-wine']};
     margin: 0 10px;
 `;
 
@@ -80,7 +81,7 @@ export const ServicesListArea = styled.View`
 export const ServiceListAreaTitle = styled.Text`
     font-size: 18px;
     font-weight: bold;
-    color: #16A286;
+    color: ${configs.colors['slightly-darker']};
     margin-bottom: 10px;
     margin-left: 10px;
 `;
@@ -96,14 +97,14 @@ export const ServiceInfo = styled.View`
 export const ServiceName = styled.Text`
     font-size: 16px;
     font-weight: bold;
-    color: #1ABC9C;
+    color: ${configs.colors.primary};
 `;
 export const ServicePrice = styled.Text`
     font-size: 14px;
-    color: #1ABC9C;
+    color: ${configs.colors.primary};
 `;
 export const ServiceChooseButton = styled.TouchableOpacity`
-    background-color: #16A286;
+    background-color: ${configs.colors['slightly-darker']};
     padding: 10px 15px;
     border-radius: 10px;
 `;
@@ -116,7 +117,7 @@ export const TestimonialsArea = styled.View`
 `;
 export const TestimonialItem = styled.View`
     padding: 15px;
-    background-color: #117864;
+    background-color: ${configs.colors.darker};
     border-radius: 10px;
     height:110px;
     justify-content: center;
