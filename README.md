@@ -50,15 +50,21 @@
 <br>
 
 <h3>Front End</h3>
-* JavaScript;
-* React Native;
-* Visual Code Studio;
+
+<ul>
+    <li>JavaScript;</li>
+    <li>React Native;</li>
+    <li>Visual Code Studio;</li>
+</ul>
 
 <h3>Back End</h3>
-* C#;
-* ASP .NET Core Web API;
-* Visual Studio;
-* MySQL
+
+<ul>
+    <li>C#t;</li>
+    <li>ASP .NET Core Web API;</li>
+    <li>Visual Studio;</li>
+    <li>MySQL</li>
+</ul>
 
 <br>
 
@@ -66,7 +72,7 @@
 
 <h2 id="layout">🔖 Layout</h2>
 
-<!--&nbsp;&nbsp;&nbsp;&nbsp;You can view the inicial layout of the project at <a href="https://www.figma.com/file/m3yboywRJO2H04cvYQXevo/Move.it-1.0-(Copy)?node-id=160%3A2761" target="_blank">Move.it - layout</a>. You must have a <a href="https://www.figma.com/" target="_blank">Figma</a> account in order to access it. The final layout can be visualized <a href="https://www.figma.com/file/mt52N4YoKzAOYslPbjJFCt/Move.it-2.0-(Copy)?node-id=160%3A2761" target="_blank">here</a>-->.
+<!--&nbsp;&nbsp;&nbsp;&nbsp;You can view the inicial layout of the project at <a href="https://www.figma.com/file/m3yboywRJO2H04cvYQXevo/Move.it-1.0-(Copy)?node-id=160%3A2761" target="_blank">Move.it - layout</a>. You must have a <a href="https://www.figma.com/" target="_blank">Figma</a> account in order to access it. The final layout can be visualized <a href="https://www.figma.com/file/mt52N4YoKzAOYslPbjJFCt/Move.it-2.0-(Copy)?node-id=160%3A2761" target="_blank">here</a>.-->
 
 <br>
 
