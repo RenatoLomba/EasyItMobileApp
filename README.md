@@ -90,19 +90,21 @@
 
 ```bash
 # Clone this repository
-git clone https://github.com/magaliais/proffy
+git clone https://github.com/RenatoLomba/EasyItMobileApp.git
 
 # Find the directory
-cd move.it
+cd EasyItMobileApp
 
 # Download dependencies
 yarn
 
-# Run the application
-yarn dev
+# Download Expo globally
+yarn add expo
 
-# Open your browser at
-https://localhost:3000
+# Run the application
+expo start
+
+# Open it in your Browser or Smartphone using Expo
 ```
 
 <br>
@@ -113,7 +115,7 @@ https://localhost:3000
 
 <br>
 
-- [ ] Add login with github account (<a href="https://docs.github.com/pt/developers/apps/authorizing-oauth-apps" target="_blank">Oauth Github</a>) (<a href="https://www.youtube.com/watch?v=Cz55Jmhfw84&ab_channel=Rocketseat" target="_blank">Serveless com Next.js</a>);
+- [ ] Add login with github account (<a href="https://docs.github.com/pt/developers/apps/authorizing-oauth-apps" target="_blank">Oauth Github</a>);
 - [ ] Add dark theme;
 
 <br>
