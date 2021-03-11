@@ -5,7 +5,7 @@
 </h1>-->
 
 <h2 align="center">
-    <!-- <img src="./README/header.png" alt="preview"> -->
+    <img src="./src/assets/logo_easyit.png" alt="preview">
     <!-- Imagem demonstrativa -->
 </h2>
 
