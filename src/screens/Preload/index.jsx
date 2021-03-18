@@ -7,23 +7,26 @@ import { useNavigation } from '@react-navigation/native';
 import Api from '../../Api';
 
 const Preload = () => {
-    const { idDispatch, avatarDispatch, favoritesDispatch, appointmentsDispatch } = useContext(UserContext);
+    const { idDispatch,
+        nameDispatch,
+        avatarDispatch,
+        favoritesDispatch,
+        appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
     //CHECK O TOKEN PARA SIGN IN, CASO CONTRÁRIO SIGN UP
     const checkToken = async () => {
         const token = await AsyncStorage.getItem('token');
         const email = await AsyncStorage.getItem('email');
-        const password = await AsyncStorage.getItem('password');
         if (token) {
             try {
-                const response = await Api.signIn(email, password);
+                const response = await Api.signIn(email, null, true);
                 if (response.token) {
                     await AsyncStorage.setItem('token', response.token.token);
                     await AsyncStorage.setItem('email', email);
-                    await AsyncStorage.setItem('password', password);
 
                     idDispatch(response.id);
+                    nameDispatch(response.name);
                     avatarDispatch(response.avatar);
                     favoritesDispatch(response.favorites);
                     appointmentsDispatch(response.appointments);

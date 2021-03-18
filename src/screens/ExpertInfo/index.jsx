@@ -41,6 +41,8 @@ import NavNextIcon from '../../assets/nav_next.svg';
 import FavoriteFullIcon from '../../assets/favorite_full.svg';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Lottie from 'lottie-react-native';
+import animationData from '../../assets/animations/favorite.json';
 import Swiper from 'react-native-swiper';
 import Api from '../../Api';
 

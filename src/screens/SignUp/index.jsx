@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { UserContext } from '../../contexts/UserContext';
+import { hashPassword } from '../../modules/hashPassword';
 
 import {
     Container,
@@ -23,7 +24,11 @@ import LockIcon from '../../assets/lock.svg';
 import PersonIcon from '../../assets/person.svg';
 
 const SignUp = () => {
-    const { idDispatch, avatarDispatch, favoritesDispatch, appointmentsDispatch } = useContext(UserContext);
+    const { idDispatch,
+        nameDispatch,
+        avatarDispatch,
+        favoritesDispatch,
+        appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,41 +50,17 @@ const SignUp = () => {
     const loadPage = async () => {
         if (showLoading) {
             try {
-                const response = await Api.signUp(name, email, password);
+                const hashedPassword = await hashPassword(password);
+                const response = await Api.signUp(name, email, hashedPassword);
                 if (response.token) {
                     await AsyncStorage.setItem('token', response.token.token);
                     await AsyncStorage.setItem('email', email);
-                    await AsyncStorage.setItem('password', password);
 
                     idDispatch(response.id);
+                    nameDispatch(response.name);
                     avatarDispatch(response.avatar);
                     favoritesDispatch(response.favorites);
                     appointmentsDispatch(response.appointments);
-
-                    // userDispatcher({
-                    //     type: 'setAvatar',
-                    //     payload: {
-                    //         avatar: response.avatar,
-                    //     },
-                    // });
-                    // userDispatcher({
-                    //     type: 'setId',
-                    //     payload: {
-                    //         id: response.id,
-                    //     },
-                    // });
-                    // userDispatcher({
-                    //     type: 'setAppointments',
-                    //     payload: {
-                    //         appointments: response.appointments
-                    //     }
-                    // });
-                    // userDispatcher({
-                    //     type: 'setFavorites',
-                    //     payload: {
-                    //         favorites: response.favorites
-                    //     }
-                    // });
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

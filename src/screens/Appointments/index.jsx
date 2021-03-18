@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import { Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import {
     Container,
     Scroller,
@@ -41,7 +41,7 @@ const Appointments = () => {
         setShowLoading(false);
     }, [userAppointments])
 
-    const handleRemoveAppointmentButton = async (id, key) => {
+    const removeAppointment = async (id, key) => {
         setShowLoading(true);
         try {
             const response = await Api.removeAppointment(id);
@@ -62,6 +62,17 @@ const Appointments = () => {
         } finally {
             setShowLoading(false);
         }
+    }
+
+    const handleRemoveAppointmentButton = (id, key) => {
+        Alert.alert(
+            'Remover Agendamento',
+            'Tem certeza que deseja remover o agendamento?',
+            [
+                { text: "Cancel", onPress: () => console.log('cancelled'), style: 'cancel' },
+                { text: "OK", onPress: () => removeAppointment(id, key) },
+            ]
+        );
     }
 
     return (

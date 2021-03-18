@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const BASE_API = 'http://192.168.0.28:5000/api/';
+const BASE_API = 'http://192.168.0.9:5000/api/';
 // 192.168.15.132 --> SEEGER
 // 192.168.0.28 --> OSVALDO
+// 192.168.0.9 --> ANDREIA
 // 192.168.0.102 --> CASA
 
 export default {
-    signIn: async (email, password) => {
-        const req = await fetch(`${BASE_API}sign/signin`, {
+    signIn: async (email, password, authenticated = false) => {
+        const req = await fetch(`${BASE_API}sign/signin?authenticated=${authenticated}`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
