@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { Switch } from 'react-native';
@@ -28,9 +28,6 @@ const Profile = () => {
     const navigator = useNavigation();
     const { userAvatar, userName, darkMode, changeMode } = useContext(UserContext);
 
-    // const [isEnabled, setIsEnabled] = useState(darkMode);
-    // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
     const handleButtonLogout = async () => {
         await AsyncStorage.removeItem('token', () => {
             navigator.reset({
@@ -42,6 +39,7 @@ const Profile = () => {
     const handleCameraButton = () => {
         alert('Abrir camera');
     }
+
     return (
         <Container>
             <Scroller>

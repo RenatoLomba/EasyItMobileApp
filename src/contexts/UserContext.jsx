@@ -1,5 +1,6 @@
-import React, { createContext, useState } from 'react';
-import configs from '../appconfigs.json';
+import React, { createContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+// import configs from '../appconfigs.json';
 
 // const fs = require('fs').promises;
 // const fs = require('react-native-fs');
@@ -15,7 +16,7 @@ const UserContextArea = ({ children }) => {
     const [userAvatar, setUserAvatar] = useState('');
     const [userFavorites, setUserFavorites] = useState([]);
     const [userAppointments, setUserAppointments] = useState([]);
-    const [darkMode, setDarkMode] = useState(configs.darkMode);
+    const [darkMode, setDarkMode] = useState(false);
 
     const idDispatch = (id) => setUserId(id);
 
@@ -28,17 +29,18 @@ const UserContextArea = ({ children }) => {
     const appointmentsDispatch = (appointments) => setUserAppointments(appointments);
 
     const changeMode = async () => {
-        try {
-            const json = JSON.stringify({ ...configs, darkMode: !darkMode });
-            // await fs.writeFile(configsPath, json, 'utf8');
-            // await fs.writeFile(configsPath, json, { flag: 'w', encoding: 'utf8' });
-            setDarkMode(!darkMode);
-
-            alert(darkMode ? 'Ativado' : 'Desativado');
-        } catch (e) {
-            alert(e.message);
-        }
+        await AsyncStorage.setItem('mode', darkMode ? 'light' : 'dark');
+        setDarkMode(!darkMode);
     }
+
+    const getMode = async () => {
+        const mode = await AsyncStorage.getItem('mode');
+        setDarkMode(mode === 'dark');
+    }
+
+    useEffect(() => {
+        getMode();
+    }, []);
 
     return (
         <UserContext.Provider value={{

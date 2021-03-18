@@ -56,6 +56,9 @@ const SignUp = () => {
                     await AsyncStorage.setItem('token', response.token.token);
                     await AsyncStorage.setItem('email', email);
 
+                    const mode = await AsyncStorage.getItem('mode');
+                    await AsyncStorage.setItem('mode', mode ? mode : 'light');
+
                     idDispatch(response.id);
                     nameDispatch(response.name);
                     avatarDispatch(response.avatar);

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { motion } from 'framer-motion';
+import AsyncStorage from '@react-native-community/async-storage';
 //import Geolocation from '@r00eact-native-community/geolocation';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import {
