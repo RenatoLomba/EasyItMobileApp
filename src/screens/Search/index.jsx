@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
 import { Text, View } from 'react-native';
 import {
     Container,
@@ -19,8 +20,12 @@ import ExpertItem from '../../components/ExpertItem';
 import configs from '../../appconfigs.json';
 
 import SearchIcon from '../../assets/search.svg';
+import Screen from '../../components/ScreenGlobal';
+import { InputArea, InputText } from '../../components/ScreenGlobal/styles';
 
 const Search = () => {
+    const { darkMode } = useContext(UserContext);
+
     const [searchText, setSearchText] = useState('');
     const [selectedOrder, setSelectedOrder] = useState('');
     const [services, setServices] = useState([]);
@@ -57,10 +62,10 @@ const Search = () => {
     const handleSearchButton = () => searchServices();
 
     return (
-        <Container>
+        <Screen>
             <Scroller>
-                <SearchArea>
-                    <SearchTextInput
+                <InputArea darkMode={darkMode}>
+                    <InputText
                         placeholder="Digite algum serviço..."
                         placeholderTextColor="#fff"
                         value={searchText}
@@ -69,7 +74,7 @@ const Search = () => {
                     <SearchButton onPress={handleSearchButton}>
                         <SearchIcon width="26" height="26" fill="#fff" />
                     </SearchButton>
-                </SearchArea>
+                </InputArea>
 
                 <OrderByArea>
                     {disponibleOrders.map((order, key) => {
@@ -99,7 +104,7 @@ const Search = () => {
                     })}
                 </ListArea>
             </Scroller>
-        </Container>
+        </Screen>
     );
 };
 export default Search;

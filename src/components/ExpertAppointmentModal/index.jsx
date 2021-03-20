@@ -30,7 +30,10 @@ import {
     HourList,
     HourSelectButton,
     HourText,
-    LoadingRegisteringIcon
+    LoadingRegisteringIcon,
+    AppointmentDate,
+    AppointmentDateArea,
+    AppointmentDateTitle
 } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -43,7 +46,7 @@ import configs from '../../appconfigs.json';
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }) => {
+const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, appointment }) => {
     const { userId, userAppointments, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
@@ -59,12 +62,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
 
     const [showLoading, setShowLoading] = useState(false);
 
-    useEffect(() => {
-        const today = new Date();
-        setSelectedDay(today.getDate());
-        setSelectedMonth(today.getMonth() + 1);
-        setSelectedYear(today.getFullYear());
-    }, []);
+    const [date, hour] = appointment ? appointment.date.split('T') : '';
 
     useEffect(() => {
         const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
@@ -126,7 +124,6 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
             }
         }
 
-        console.log(appointmentDTOCreate);
         try {
             const response = await Api.registerAppointment(appointmentDTOCreate);
             let appointments = [...userAppointments];
@@ -148,6 +145,15 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
             setShowLoading(false);
         }
     };
+
+    useEffect(() => {
+        const today = new Date();
+        setSelectedDay(today.getDate());
+        setSelectedMonth(today.getMonth() + 1);
+        setSelectedYear(today.getFullYear());
+
+        // handleDateNextPrevButton(+1);
+    }, []);
 
     return (
         <Modal
@@ -176,52 +182,54 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
                         </ModalServiceInfo>
                     </ModalItem>
 
-                    <ModalItem>
-                        <DateInfo>
-                            <DatePrevButton onPress={() => handleDateNextPrevButton(-1)}>
-                                <NavPrevIcon width="35" height="35" fill="#000" />
-                            </DatePrevButton>
-                            <DateTitleArea>
-                                <DateTitleText>
-                                    {selectedMonth && selectedYear && `${months[selectedMonth - 1]} ${selectedYear}`}
-                                </DateTitleText>
-                            </DateTitleArea>
-                            <DateNextButton onPress={() => handleDateNextPrevButton(+1)}>
-                                <NavNextIcon width="35" height="35" fill="#000" />
-                            </DateNextButton>
-                        </DateInfo>
-                        <DateList
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {listDays.map((day, key) => {
-                                return (
-                                    <DateSelectButton
-                                        style={{
-                                            opacity: !day.available ? 0.5 : 1,
-                                            backgroundColor: day.available && day.dateInfo.day === selectedDay ? "#1ABC9C" : "#FFF",
-                                        }}
-                                        key={key}
-                                        disabled={!day.available}
-                                        onPress={() => handleDateSelectButton(day)}
-                                    >
-                                        <DateWeekDay
-                                            style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
+                    {!appointment &&
+                        <ModalItem>
+                            <DateInfo>
+                                <DatePrevButton onPress={() => handleDateNextPrevButton(-1)}>
+                                    <NavPrevIcon width="35" height="35" fill="#000" />
+                                </DatePrevButton>
+                                <DateTitleArea>
+                                    <DateTitleText>
+                                        {selectedMonth && selectedYear && `${months[selectedMonth - 1]} ${selectedYear}`}
+                                    </DateTitleText>
+                                </DateTitleArea>
+                                <DateNextButton onPress={() => handleDateNextPrevButton(+1)}>
+                                    <NavNextIcon width="35" height="35" fill="#000" />
+                                </DateNextButton>
+                            </DateInfo>
+                            <DateList
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}
+                            >
+                                {listDays.map((day, key) => {
+                                    return (
+                                        <DateSelectButton
+                                            style={{
+                                                opacity: !day.available ? 0.5 : 1,
+                                                backgroundColor: day.available && day.dateInfo.day === selectedDay ? "#1ABC9C" : "#FFF",
+                                            }}
+                                            key={key}
+                                            disabled={!day.available}
+                                            onPress={() => handleDateSelectButton(day)}
                                         >
-                                            {day.weekDay}
-                                        </DateWeekDay>
-                                        <DateDay
-                                            style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
-                                        >
-                                            {day.dateInfo.day}
-                                        </DateDay>
-                                    </DateSelectButton>
-                                )
-                            })}
-                        </DateList>
-                    </ModalItem>
+                                            <DateWeekDay
+                                                style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
+                                            >
+                                                {day.weekDay}
+                                            </DateWeekDay>
+                                            <DateDay
+                                                style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
+                                            >
+                                                {day.dateInfo.day}
+                                            </DateDay>
+                                        </DateSelectButton>
+                                    )
+                                })}
+                            </DateList>
+                        </ModalItem>
+                    }
 
-                    {listHours.length > 0 &&
+                    {!appointment && listHours.length > 0 &&
                         <ModalItem>
                             <HourList
                                 horizontal={true}
@@ -252,14 +260,27 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo }
                         </ModalItem>
                     }
 
+                    {appointment &&
+                        (
+                            <ModalItem>
+                                <AppointmentDateArea>
+                                    <AppointmentDateTitle>Data marcada: </AppointmentDateTitle>
+                                    <AppointmentDate>{`${date.replace('-', '/').replace('-', '/')}`} - {hour}</AppointmentDate>
+                                </AppointmentDateArea>
+                            </ModalItem>
+                        )
+                    }
+
                     {showLoading && <LoadingRegisteringIcon size="large" color="#FFF" />}
 
-                    <FinishAppointmentButton
-                        style={{ opacity: !allowEndAppointment ? 0.5 : 1 }}
-                        disabled={!allowEndAppointment}
-                        onPress={handleFinishButton}>
-                        <FinishAppointmentButtonText>Finalizar Agendamento</FinishAppointmentButtonText>
-                    </FinishAppointmentButton>
+                    {!appointment &&
+                        <FinishAppointmentButton
+                            style={{ opacity: !allowEndAppointment ? 0.5 : 1 }}
+                            disabled={!allowEndAppointment}
+                            onPress={handleFinishButton}>
+                            <FinishAppointmentButtonText>Finalizar Agendamento</FinishAppointmentButtonText>
+                        </FinishAppointmentButton>
+                    }
 
                 </ModalBody>
             </ModalArea>
@@ -272,5 +293,6 @@ ExpertAppointmentModal.propTypes = {
     service: PropTypes.object,
     showModal: PropTypes.bool,
     setShowModal: PropTypes.func,
-    expertInfo: PropTypes.object
+    expertInfo: PropTypes.object,
+    appointment: PropTypes.object
 };

@@ -15,25 +15,25 @@ import {
     ServiceName,
     Date,
     CardHeader,
-    RemoveAppointmentButton,
-    LoadingIcon
+    LoadingIcon,
+    RemoveAppointmentButton
 } from './styles';
 
 import Api from '../../Api';
-import TrashIcon from '../../assets/trash.svg';
+import ExpertItem from '../../components/ExpertItem';
 
 import configs from '../../appconfigs.json';
+import Screen from '../../components/ScreenGlobal';
+import { ListArea } from '../Home/styles';
+import ExpertAppointmentModal from '../../components/ExpertAppointmentModal';
 
 const Appointments = () => {
     const { userAppointments, appointmentsDispatch } = useContext(UserContext);
-    const [appointmentsList, setAppointmentsList] = useState([]);
+    const [appointmentsList, setAppointmentsList] = useState(userAppointments);
     const [showLoading, setShowLoading] = useState(false);
-
-    useEffect(() => {
-        setShowLoading(true);
-        setAppointmentsList(userAppointments);
-        setShowLoading(false);
-    }, []);
+    const [selectedAppointment, setSelectedAppointment] = useState(userAppointments[0]);
+    const [showModal, setShowModal] = useState(false);
+    const [appointmentKey, setAppointmentKey] = useState(null);
 
     useEffect(() => {
         setShowLoading(true);
@@ -47,7 +47,6 @@ const Appointments = () => {
             const response = await Api.removeAppointment(id);
             if (response) {
                 let appointments = [...userAppointments];
-                // appointments.slice(key, 1);
                 appointments.splice(appointments.findIndex(v => v.id === id));
 
                 setAppointmentsList(appointments);
@@ -75,8 +74,13 @@ const Appointments = () => {
         );
     }
 
+    const handleSeeDetailsButton = (appointment, key) => {
+        setSelectedAppointment(appointment);
+        setShowModal(true);
+    }
+
     return (
-        <Container>
+        <Screen>
             <Scroller>
                 <Header>
                     <HeaderText>Agendamentos</HeaderText>
@@ -84,10 +88,29 @@ const Appointments = () => {
 
                 {showLoading && <LoadingIcon size="large" color="#fff" />}
 
-                {appointmentsList.length > 0 &&
+                <ListArea>
+                    {appointmentsList.length > 0 && appointmentsList.sort(() => .5 - Math.random()).map((item, key) => {
+                        return <ExpertItem
+                            key={`expert__${key}`}
+                            data={item.expert}
+                            service={item.service}
+                            modalShowDetail={() => handleSeeDetailsButton(item, key)}
+                            removeAppointment={() => handleRemoveAppointmentButton(item.id, key)}
+                        />;
+                    })}
+                </ListArea>
+
+                <ExpertAppointmentModal
+                    service={selectedAppointment.service}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    expertInfo={selectedAppointment.expert}
+                    appointment={selectedAppointment}
+                />
+
+                {/* {appointmentsList.length > 0 &&
                     appointmentsList.map((appointment, key) => {
                         const [date, hour] = appointment.date.split('T');
-                        // console.log(date, hour);
                         return (
                             <Area key={key}>
                                 <Avatar source={{
@@ -111,9 +134,9 @@ const Appointments = () => {
                             </Area>
                         )
                     })
-                }
+                } */}
             </Scroller>
-        </Container>
+        </Screen>
     );
 };
 Appointments.displayName = 'Appointments';

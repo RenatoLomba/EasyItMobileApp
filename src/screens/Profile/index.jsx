@@ -23,6 +23,7 @@ import AccountIcon from '../../assets/account.svg';
 import CameraIcon from '../../assets/camera-icon.svg';
 
 import configs from '../../appconfigs.json';
+import Screen from '../../components/ScreenGlobal';
 
 const Profile = () => {
     const navigator = useNavigation();
@@ -41,7 +42,7 @@ const Profile = () => {
     }
 
     return (
-        <Container>
+        <Screen>
             <Scroller>
                 <Header>
                     <HeaderText>Perfil de {userName}</HeaderText>
@@ -77,7 +78,7 @@ const Profile = () => {
                     <LogoutButtonText>LOGOUT</LogoutButtonText>
                 </LogoutButton>
             </Scroller>
-        </Container>
+        </Screen>
     );
 };
 Profile.displayName = 'Profile';

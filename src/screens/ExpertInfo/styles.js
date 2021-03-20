@@ -4,7 +4,7 @@ import configs from '../../appconfigs.json';
 
 export const Container = styled.View`
     flex: 1;
-    background-color: #fff;
+    background-color: ${props => props.darkMode ? configs.colors.dark : '#fff'};
 `;
 export const Scroller = styled.ScrollView`
     margin-top: 30px;
@@ -34,7 +34,7 @@ export const FakeSwipper = styled.View`
 `;
 
 export const PageBody = styled.View`
-    background-color: #fff;
+    background-color: ${props => props.darkMode ? configs.colors.dark : '#fff'};
     border-top-left-radius: 50px;
     margin-top: -475px;
     min-height: 400px;
@@ -50,7 +50,7 @@ export const ExpertAvatar = styled.Image`
     border-radius: 20px;
     margin-left: 20px;
     border-width: 4px;
-    border-color: #FFF;
+    border-color: ${props => props.darkMode ? configs.colors.dark : '#fff'};
 `;
 export const ExpertInfo = styled.View`
     flex: 1;
@@ -58,7 +58,7 @@ export const ExpertInfo = styled.View`
     align-self: flex-end;
 `;
 export const ExpertNameText = styled.Text`
-    color: #000;
+    color: ${props => props.darkMode ? '#fff' : '#000'};
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 10px;
@@ -81,7 +81,7 @@ export const ServicesListArea = styled.View`
 export const ServiceListAreaTitle = styled.Text`
     font-size: 18px;
     font-weight: bold;
-    color: ${configs.colors['slightly-darker']};
+    color: ${props => props.darkMode ? '#fff' : configs.colors['slightly-darker']};
     margin-bottom: 10px;
     margin-left: 10px;
 `;
@@ -97,11 +97,11 @@ export const ServiceInfo = styled.View`
 export const ServiceName = styled.Text`
     font-size: 16px;
     font-weight: bold;
-    color: ${configs.colors.primary};
+    color: ${props => props.darkMode ? '#fff' : configs.colors.primary};
 `;
 export const ServicePrice = styled.Text`
     font-size: 14px;
-    color: ${configs.colors.primary};
+    color: ${props => props.darkMode ? '#fff' : configs.colors.primary};
 `;
 export const ServiceChooseButton = styled.TouchableOpacity`
     background-color: ${configs.colors['slightly-darker']};
@@ -110,7 +110,7 @@ export const ServiceChooseButton = styled.TouchableOpacity`
 `;
 export const ServiceChooseButtonText = styled.Text`
     font-weight: bold;
-    color: #fff;
+    color: ${'#fff'};
 `;
 
 export const TestimonialsArea = styled.View`

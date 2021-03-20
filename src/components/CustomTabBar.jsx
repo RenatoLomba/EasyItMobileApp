@@ -14,7 +14,7 @@ import configs from '../appconfigs.json';
 
 const TabArea = styled.View`
     height: 60px;
-    background-color: ${configs.colors['slightly-darker']};
+    background-color: ${props => props.darkMode ? configs.colors.darker : configs.colors['slightly-darker']};
     flex-direction: row;
 `;
 
@@ -29,7 +29,7 @@ const TabItemCenter = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     background-color: #FFFFFF;
-    border: 3px solid ${configs.colors['slightly-darker']};
+    border: 3px solid ${props => props.darkMode ? configs.colors.darker : configs.colors['slightly-darker']};
     border-radius: 35px;
     margin-top: -32px;
 `;
@@ -42,22 +42,22 @@ const AvatarIcon = styled.Image`
 
 // eslint-disable-next-line react/prop-types
 const CustomTabBar = ({ state, navigation }) => {
-    const { userAvatar } = useContext(UserContext);
+    const { userAvatar, darkMode } = useContext(UserContext);
 
     const goTo = (screenName) => {
         navigation.navigate(screenName);
     };
 
     return (
-        <TabArea>
+        <TabArea darkMode={darkMode}>
             <TabItem onPress={() => goTo("Home")}>
                 <HomeIcon style={{ opacity: state.index === 0 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
             </TabItem>
             <TabItem onPress={() => goTo("Search")}>
                 <SearchIcon style={{ opacity: state.index === 1 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
             </TabItem>
-            <TabItemCenter onPress={() => goTo("Appointments")}>
-                <TodayIcon width="32" height="32" fill={configs.colors['slightly-darker']} />
+            <TabItemCenter darkMode={darkMode} onPress={() => goTo("Appointments")}>
+                <TodayIcon width="32" height="32" fill={darkMode ? configs.colors.darker : configs.colors['slightly-darker']} />
             </TabItemCenter>
             <TabItem onPress={() => goTo("Favorites")}>
                 <FavoriteIcon style={{ opacity: state.index === 3 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />

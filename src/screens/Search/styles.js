@@ -22,22 +22,6 @@ export const HeaderText = styled.Text`
     font-weight: bold;
 `;
 
-export const SearchArea = styled.View`
-    background-color: ${configs.colors['slightly-darker']};
-    height: 60px;
-    border-radius: 30px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-`;
-export const SearchTextInput = styled.TextInput`
-    flex: 1;
-    color: #fff;
-    font-size: 16px;
-    margin-right: 5px;
-`;
-
 export const SearchButton = styled.TouchableOpacity`
     width: 24px;
     height: 24px;

@@ -2,10 +2,6 @@ import React from 'react';
 import styled from 'styled-components/native';
 import configs from '../../appconfigs.json';
 
-export const Container = styled.SafeAreaView`
-    background-color: ${configs.colors.primary};
-    flex: 1;
-`;
 export const Scroller = styled.ScrollView`
     flex: 1;
     margin-top: 50px;

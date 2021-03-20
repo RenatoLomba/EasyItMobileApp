@@ -11,6 +11,7 @@ import {
 } from './styles';
 
 import ExpertItem from '../../components/ExpertItem';
+import Screen from '../../components/ScreenGlobal';
 
 const Favorites = () => {
     const { userFavorites } = useContext(UserContext);
@@ -32,7 +33,7 @@ const Favorites = () => {
     }, [userFavorites]);
 
     return (
-        <Container>
+        <Screen>
             <Scroller>
                 <Header>
                     <HeaderText>Favoritos</HeaderText>
@@ -46,7 +47,7 @@ const Favorites = () => {
                     })}
                 </ListArea>
             </Scroller>
-        </Container>
+        </Screen>
     );
 };
 export default Favorites;

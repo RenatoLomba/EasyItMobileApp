@@ -136,3 +136,29 @@ export const HourText = styled.Text`
 export const LoadingRegisteringIcon = styled.ActivityIndicator`
     margin: 16px 0;
 `;
+
+export const RemoveAppointmentButton = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+    /* border: 2px solid #f50045; */
+    margin-left: 20px;
+`;
+
+export const AppointmentDate = styled.Text`
+    font-size: 14px;
+    font-weight: bold;
+    color: #737373;
+`;
+export const AppointmentDateTitle = styled.Text`
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+`;
+export const AppointmentDateArea = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;

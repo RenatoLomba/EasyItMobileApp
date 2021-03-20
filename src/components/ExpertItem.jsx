@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
 import StarsComponent from './StarsComponent';
 
+import TrashIcon from '../assets/trash.svg';
+
 import configs from '../appconfigs.json';
+import { UserContext } from '../contexts/UserContext';
 
 const Area = styled.TouchableOpacity`
-    background-color: #fff;
+    background-color: ${props => props.darkMode ? configs.colors['slightly-darker'] : '#fff'};
     margin-bottom: 20px;
     border-radius: 20px;
     padding: 15px;
@@ -28,7 +31,7 @@ const UserName = styled.Text`
     font-weight: bold;
 `;
 const SeeProfileButton = styled.View`
-    border: 1px solid ${configs.colors.primary};
+    border: 1px solid ${props => props.darkMode ? '#fff' : configs.colors.primary};
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -37,10 +40,20 @@ const SeeProfileButton = styled.View`
 `;
 const SeeProfileButtonText = styled.Text`
     font-size: 13px;
-    color: ${configs.colors.primary};
+    color: ${props => props.darkMode ? '#fff' : configs.colors.primary};
+`;
+const RemoveAppointmentButton = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+    /* border: 2px solid #f50045; */
+    margin-left: 20px;
 `;
 
-const ExpertItem = ({ data }) => {
+const ExpertItem = ({ data, service, modalShowDetail, removeAppointment }) => {
+    const { darkMode } = useContext(UserContext);
     const navigator = useNavigation();
 
     const handleExpertClick = () => {
@@ -53,7 +66,7 @@ const ExpertItem = ({ data }) => {
     };
 
     return (
-        <Area onPress={handleExpertClick}>
+        <Area darkMode={darkMode} onPress={service ? modalShowDetail : handleExpertClick}>
             <Avatar source={{
                 uri: data.avatar
             }} />
@@ -63,10 +76,16 @@ const ExpertItem = ({ data }) => {
                 {/* COMPONENTE DAS ESTRELAS */}
                 <StarsComponent stars={data.stars} showScore={true} />
 
-                <SeeProfileButton>
-                    <SeeProfileButtonText>Ver Perfil</SeeProfileButtonText>
+                <SeeProfileButton darkMode={darkMode}>
+                    <SeeProfileButtonText darkMode={darkMode}>{service ? 'Detalhes' : 'Ver Perfil'}</SeeProfileButtonText>
                 </SeeProfileButton>
             </InfoArea>
+
+            {service &&
+                <RemoveAppointmentButton onPress={removeAppointment}>
+                    <TrashIcon width="20" height="20" fill={configs.colors['red-wine']} />
+                </RemoveAppointmentButton>
+            }
         </Area>
     );
 };

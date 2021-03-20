@@ -50,7 +50,7 @@ import configs from '../../appconfigs.json';
 
 export default () => {
     const navigator = useNavigation();
-    const { userId, userFavorites, favoritesDispatch } = useContext(UserContext);
+    const { userId, userFavorites, favoritesDispatch, darkMode } = useContext(UserContext);
     const router = useRoute();
 
     const [expertInfo, setExpertInfo] = useState({ ...router.params });
@@ -136,7 +136,7 @@ export default () => {
     };
 
     return (
-        <Container>
+        <Container darkMode={darkMode}>
             <Scroller>
 
                 {expertInfo.photos && expertInfo.photos.length > 0 ?
@@ -170,14 +170,14 @@ export default () => {
                     </Swiper>
                 }
 
-                <PageBody>
+                <PageBody darkMode={darkMode}>
 
                     <ExpertInfoArea>
-                        <ExpertAvatar source={{
+                        <ExpertAvatar darkMode={darkMode} source={{
                             uri: expertInfo.avatar
                         }} />
                         <ExpertInfo>
-                            <ExpertNameText>{expertInfo.name}</ExpertNameText>
+                            <ExpertNameText darkMode={darkMode}>{expertInfo.name}</ExpertNameText>
                             <StarsComponent stars={expertInfo.stars} showScore={true} />
                         </ExpertInfo>
                         <ExpertFavButton onPress={handleFavButton}>
@@ -193,17 +193,20 @@ export default () => {
 
                     {expertInfo.services &&
                         <ServicesListArea>
-                            <ServiceListAreaTitle>Lista de serviços</ServiceListAreaTitle>
+                            <ServiceListAreaTitle darkMode={darkMode}>Lista de serviços</ServiceListAreaTitle>
 
                             {expertInfo.services.map((service, key) => {
                                 return (
                                     <ServiceItem key={key}>
                                         <ServiceInfo>
-                                            <ServiceName>{service.name}</ServiceName>
-                                            <ServicePrice>R$ {service.price.toFixed(2).toString().replace('.', ',')}</ServicePrice>
+                                            <ServiceName darkMode={darkMode}>{service.name}</ServiceName>
+                                            <ServicePrice darkMode={darkMode}>R$ {service.price.toFixed(2).toString().replace('.', ',')}</ServicePrice>
                                         </ServiceInfo>
-                                        <ServiceChooseButton onPress={() => handleServiceChooseButton(service)}>
-                                            <ServiceChooseButtonText>Agendar</ServiceChooseButtonText>
+                                        <ServiceChooseButton
+                                            onPress={() => handleServiceChooseButton(service)}
+                                            darkMode={darkMode}
+                                        >
+                                            <ServiceChooseButtonText darkMode={darkMode}>Agendar</ServiceChooseButtonText>
                                         </ServiceChooseButton>
                                     </ServiceItem>
                                 )
