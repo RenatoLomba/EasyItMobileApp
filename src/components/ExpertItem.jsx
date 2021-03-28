@@ -43,13 +43,14 @@ const SeeProfileButtonText = styled.Text`
     color: ${props => props.darkMode ? '#fff' : configs.colors.primary};
 `;
 const RemoveAppointmentButton = styled.TouchableOpacity`
-    justify-content: center;
-    align-items: center;
+    position: absolute;
+    right: 0px;
+    top: 16px;
+    background: transparent;
+    border: 0;
+    font-size: 0;
     width: 32px;
     height: 32px;
-    border-radius: 20px;
-    /* border: 2px solid #f50045; */
-    margin-left: 20px;
 `;
 
 const ExpertItem = ({ data, service, modalShowDetail, removeAppointment }) => {

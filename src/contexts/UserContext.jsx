@@ -16,6 +16,8 @@ const UserContextArea = ({ children }) => {
     const [userAvatar, setUserAvatar] = useState('');
     const [userFavorites, setUserFavorites] = useState([]);
     const [userAppointments, setUserAppointments] = useState([]);
+    const [userTestimonials, setUserTestimonials] = useState([]);
+
     const [darkMode, setDarkMode] = useState(false);
 
     const idDispatch = (id) => setUserId(id);
@@ -27,6 +29,8 @@ const UserContextArea = ({ children }) => {
     const favoritesDispatch = (favorites) => setUserFavorites(favorites);
 
     const appointmentsDispatch = (appointments) => setUserAppointments(appointments);
+
+    const testimonialsDispatch = (testimonials) => setUserTestimonials(testimonials);
 
     const changeMode = async () => {
         await AsyncStorage.setItem('mode', darkMode ? 'light' : 'dark');
@@ -49,12 +53,14 @@ const UserContextArea = ({ children }) => {
             userAvatar,
             userFavorites,
             userAppointments,
+            userTestimonials,
             darkMode,
             idDispatch,
             nameDispatch,
             avatarDispatch,
             favoritesDispatch,
             appointmentsDispatch,
+            testimonialsDispatch,
             changeMode
         }}>
             {children}

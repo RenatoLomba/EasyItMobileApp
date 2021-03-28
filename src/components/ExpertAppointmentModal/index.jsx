@@ -64,6 +64,9 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
     const [date, hour] = appointment ? appointment.date.split('T') : '';
 
+    const [year, month, day] = date.split('-');
+    const [hours, minutes, seconds] = hour.split(':');
+
     useEffect(() => {
         const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
         let newListDays = [];
@@ -265,7 +268,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
                             <ModalItem>
                                 <AppointmentDateArea>
                                     <AppointmentDateTitle>Data marcada: </AppointmentDateTitle>
-                                    <AppointmentDate>{`${date.replace('-', '/').replace('-', '/')}`} - {hour}</AppointmentDate>
+                                    <AppointmentDate>{`${day}/${month}`} - {`${hours}:${minutes}h`}</AppointmentDate>
                                 </AppointmentDateArea>
                             </ModalItem>
                         )

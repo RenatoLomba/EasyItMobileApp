@@ -28,7 +28,9 @@ const SignUp = () => {
         nameDispatch,
         avatarDispatch,
         favoritesDispatch,
-        appointmentsDispatch } = useContext(UserContext);
+        appointmentsDispatch,
+        testimonialsDispatch
+    } = useContext(UserContext);
     const navigator = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -64,6 +66,7 @@ const SignUp = () => {
                     avatarDispatch(response.avatar);
                     favoritesDispatch(response.favorites);
                     appointmentsDispatch(response.appointments);
+                    testimonialsDispatch(response.testimonials);
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

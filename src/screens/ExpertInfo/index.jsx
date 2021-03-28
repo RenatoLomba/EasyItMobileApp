@@ -27,7 +27,10 @@ import {
     SwipeItem,
     SwipeImage,
     BackButton,
-    LoadingIcon
+    LoadingIcon,
+    TestimonialAddButton,
+    TestimonialAddButtonText,
+    TestimonialAddButtonArea
 } from './styles';
 
 import { Text } from 'react-native';
@@ -47,10 +50,17 @@ import Swiper from 'react-native-swiper';
 import Api from '../../Api';
 
 import configs from '../../appconfigs.json';
+import TestimonialAddModal from '../../components/TestimonialAddModal';
 
 export default () => {
     const navigator = useNavigation();
-    const { userId, userFavorites, favoritesDispatch, darkMode } = useContext(UserContext);
+    const {
+        userId,
+        userFavorites,
+        favoritesDispatch,
+        darkMode,
+        userTestimonials
+    } = useContext(UserContext);
     const router = useRoute();
 
     const [expertInfo, setExpertInfo] = useState({ ...router.params });
@@ -58,8 +68,11 @@ export default () => {
     const [favorited, setFavorited] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showTestimonialModal, setShowTestimonialModal] = useState(false);
 
     const [favoriteId, setFavoriteId] = useState('');
+
+    const currentUserTestimonial = userTestimonials.find(u => u.expertId === expertInfo.id);
 
     const getExpertCompleteInfo = async () => {
         setShowLoading(true);
@@ -134,6 +147,10 @@ export default () => {
         setSelectedService(service);
         setShowModal(true);
     };
+
+    const handleTestimonialAddButton = () => {
+        setShowTestimonialModal(true);
+    }
 
     return (
         <Container darkMode={darkMode}>
@@ -215,6 +232,15 @@ export default () => {
                         </ServicesListArea>
                     }
 
+                    <TestimonialAddButtonArea>
+                        <TestimonialAddButton
+                            style={{ opacity: currentUserTestimonial ? 0.5 : 1 }}
+                            disabled={currentUserTestimonial}
+                            onPress={handleTestimonialAddButton}>
+                            <TestimonialAddButtonText>Avaliar</TestimonialAddButtonText>
+                        </TestimonialAddButton>
+                    </TestimonialAddButtonArea>
+
                     {expertInfo.testimonials && expertInfo.testimonials.length > 0 &&
                         <TestimonialsArea>
                             <Swiper
@@ -250,6 +276,13 @@ export default () => {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 expertInfo={expertInfo}
+            />
+
+            <TestimonialAddModal
+                showModal={showTestimonialModal}
+                setShowModal={setShowTestimonialModal}
+                expertInfo={expertInfo}
+                getExpertCompleteInfo={getExpertCompleteInfo}
             />
 
         </Container>

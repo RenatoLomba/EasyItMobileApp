@@ -11,7 +11,9 @@ const Preload = () => {
         nameDispatch,
         avatarDispatch,
         favoritesDispatch,
-        appointmentsDispatch } = useContext(UserContext);
+        appointmentsDispatch,
+        testimonialsDispatch
+    } = useContext(UserContext);
     const navigator = useNavigation();
 
     //CHECK O TOKEN PARA SIGN IN, CASO CONTRÁRIO SIGN UP
@@ -33,6 +35,7 @@ const Preload = () => {
                     avatarDispatch(response.avatar);
                     favoritesDispatch(response.favorites);
                     appointmentsDispatch(response.appointments);
+                    testimonialsDispatch(response.testimonials);
 
                     navigator.reset({
                         routes: [{ name: 'MainTab' }]

@@ -21,25 +21,35 @@ const ScoreText = styled.Text`
     margin-left: 5px;
 `;
 
+const StarButton = styled.TouchableOpacity`
+    width: 18px;
+    height: 18px;
+`;
+
 // eslint-disable-next-line react/prop-types
-const StarsComponent = ({ stars, showScore }) => {
+const StarsComponent = ({ stars, showScore, setStarRate = null }) => {
     let s = [0, 0, 0, 0, 0];
     const floor = Math.floor(stars);
     const left = stars - floor;
 
-    for (var i = 0; i < floor; i++) {
+    for (let i = 0; i < floor; i++) {
         s[i] = 2;
     }
-    s[i] = left > 0 && 1;
+    s[s.length - 1] = left > 0 ? 1 : 0;
+    if (floor === 5) {
+        s[s.length - 1] = 2;
+    }
 
     return (
         <StarArea>
             {s.map((value, key) => {
                 return (
                     <StarView key={`star__${key}`}>
-                        {value === 0 && <StarEmpty width="18" height="18" fill={configs.colors['yellow-star']} />}
-                        {value === 1 && <StarHalf width="18" height="18" fill={configs.colors['yellow-star']} />}
-                        {value === 2 && <StarFull width="18" height="18" fill={configs.colors['yellow-star']} />}
+                        <StarButton onPress={() => setStarRate ? setStarRate(key + 1) : console.log('')}>
+                            {value === 0 && <StarEmpty width="18" height="18" fill={configs.colors['yellow-star']} />}
+                            {value === 1 && <StarHalf width="18" height="18" fill={configs.colors['yellow-star']} />}
+                            {value === 2 && <StarFull width="18" height="18" fill={configs.colors['yellow-star']} />}
+                        </StarButton>
                     </StarView>
                 );
             })}

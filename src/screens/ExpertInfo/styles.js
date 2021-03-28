@@ -114,6 +114,7 @@ export const ServiceChooseButtonText = styled.Text`
 `;
 
 export const TestimonialsArea = styled.View`
+    margin-bottom: 25px;
 `;
 export const TestimonialItem = styled.View`
     padding: 15px;
@@ -137,6 +138,21 @@ export const TestimonialTitle = styled.Text`
 export const TestimonialDescription = styled.Text`
     font-size: 14px;
     color: #fff;
+`;
+export const TestimonialAddButtonArea = styled.View`
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    margin-left: 20px;
+`;
+export const TestimonialAddButton = styled.TouchableOpacity`
+    background-color: ${configs.colors['slightly-darker']};
+    padding: 10px 15px;
+    border-radius: 10px;
+`;
+export const TestimonialAddButtonText = styled.Text`
+    font-weight: bold;
+    color: ${'#fff'};
 `;
 
 export const BackButton = styled.TouchableOpacity`
