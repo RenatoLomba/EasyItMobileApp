@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { Switch } from 'react-native';
+import { Camera } from 'expo-camera'
 import {
     Container,
     Scroller,
@@ -38,7 +39,7 @@ const Profile = () => {
     };
 
     const handleCameraButton = () => {
-        alert('Abrir camera');
+        navigator.navigate('Camera');
     }
 
     return (

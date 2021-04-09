@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const BASE_API = 'http://192.168.0.30:5000/api/';
+const BASE_API = 'http://192.168.0.104:5000/api/';
 // 192.168.15.132 --> SEEGER
-// 192.168.0.30 --> OSVALDO
+// 192.168.0.27 --> OSVALDO
 // 192.168.0.2 --> ANDREIA
-// 192.168.0.102 --> CASA
+// 192.168.0.104 --> CASA
 
 class Api {
     async signIn(email, password, authenticated = false) {

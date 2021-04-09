@@ -46,7 +46,7 @@ import configs from '../../appconfigs.json';
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, appointment }) => {
+const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, appointment = null }) => {
     const { userId, userAppointments, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
@@ -64,8 +64,8 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
     const [date, hour] = appointment ? appointment.date.split('T') : '';
 
-    const [year, month, day] = date.split('-');
-    const [hours, minutes, seconds] = hour.split(':');
+    const [year, month, day] = appointment ? date.split('-') : [null, null, null];
+    const [hours, minutes, seconds] = appointment ? hour.split(':') : [null, null, null];
 
     useEffect(() => {
         const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();

@@ -7,10 +7,11 @@ import SignUp from '../screens/SignUp';
 import MainTab from './MainTab';
 
 import ExpertInfo from '../screens/ExpertInfo';
+import Camera from '../components/Camera'
 
 const Stack = createStackNavigator();
 
-export default () => (
+const MainStack = () => (
     <Stack.Navigator
         initialRouteName="Preload"
         screenOptions={{
@@ -23,5 +24,7 @@ export default () => (
         <Stack.Screen name="MainTab" component={MainTab} />
 
         <Stack.Screen name="ExpertInfo" component={ExpertInfo} />
+        <Stack.Screen name="Camera" component={Camera} />
     </Stack.Navigator>
 );
+export default MainStack;
