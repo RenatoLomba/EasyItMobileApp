@@ -24,13 +24,6 @@ import LockIcon from '../../assets/lock.svg';
 import PersonIcon from '../../assets/person.svg';
 
 const SignUp = () => {
-    const { idDispatch,
-        nameDispatch,
-        avatarDispatch,
-        favoritesDispatch,
-        appointmentsDispatch,
-        testimonialsDispatch
-    } = useContext(UserContext);
     const navigator = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -52,27 +45,16 @@ const SignUp = () => {
     const loadPage = async () => {
         if (showLoading) {
             try {
-                const hashedPassword = await hashPassword(password);
-                const response = await Api.signUp(name, email, hashedPassword);
-                if (response.token) {
-                    await AsyncStorage.setItem('token', response.token.token);
-                    await AsyncStorage.setItem('email', email);
-
-                    const mode = await AsyncStorage.getItem('mode');
-                    await AsyncStorage.setItem('mode', mode ? mode : 'light');
-
-                    idDispatch(response.id);
-                    nameDispatch(response.name);
-                    avatarDispatch(response.avatar);
-                    favoritesDispatch(response.favorites);
-                    appointmentsDispatch(response.appointments);
-                    testimonialsDispatch(response.testimonials);
-
+                // const hashedPassword = await hashPassword(password);
+                const response = await Api.signUp(name, email, password);
+                // console.log(response);
+                if (response.id) {
+                    alert(`Usuário ${response.name} criado com sucesso!`)
                     navigator.reset({
-                        routes: [{ name: 'MainTab' }]
+                        routes: [{ name: 'SignIn', }]
                     });
                 } else {
-                    alert(response);
+                    alert(response.error);
                 }
             } catch (error) {
                 alert(error.message);

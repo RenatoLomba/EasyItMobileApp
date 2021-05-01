@@ -48,7 +48,13 @@ const LetterCount = styled.Text`
     padding: 5px;
 `;
 
-const TestimonialAddModal = ({ showModal, setShowModal, expertInfo, getExpertCompleteInfo }) => {
+const TestimonialAddModal = ({
+    showModal,
+    setShowModal,
+    expertInfo,
+    getExpertCompleteInfo,
+    disableButton
+}) => {
     const { userId, userTestimonials, testimonialsDispatch } = useContext(UserContext);
 
     const [rating, setRating] = useState(0);
@@ -66,6 +72,7 @@ const TestimonialAddModal = ({ showModal, setShowModal, expertInfo, getExpertCom
                 testimonialsDispatch(testimonials);
                 setShowModal(false);
                 await getExpertCompleteInfo();
+                disableButton(true)
             } else {
                 alert(result);
             }
@@ -79,6 +86,11 @@ const TestimonialAddModal = ({ showModal, setShowModal, expertInfo, getExpertCom
     const selectStarRate = (value) => {
         const val = value > 5 ? 5 : value;
         setRating(val);
+    }
+
+    function handleChangeText(t) {
+        if (String(t).length > 100) return;
+        setDescription(t);
     }
 
     useEffect(() => {
@@ -115,10 +127,10 @@ const TestimonialAddModal = ({ showModal, setShowModal, expertInfo, getExpertCom
                                 multiline
                                 numberOfLines={3}
                                 value={description}
-                                onChangeText={t => setDescription(t)}
+                                onChangeText={handleChangeText}
                                 placeholder="Digite um comentário..."
                             />
-                            <LetterCount>{letterCount}/60</LetterCount>
+                            <LetterCount>{letterCount}/100</LetterCount>
                         </DescriptionArea>
                     </ModalItem>
 

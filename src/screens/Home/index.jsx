@@ -72,6 +72,7 @@ const Home = () => {
         try {
             const locationParam = location != '' ? location : 'São Paulo';
             const response = await Api.getExpertsByLocation(locationParam);
+            // console.log(response);
             if (response.length > 0) {
                 setLocation(response[0].location);
                 setListExperts(response);

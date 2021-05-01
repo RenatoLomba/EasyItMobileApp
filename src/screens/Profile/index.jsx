@@ -50,10 +50,10 @@ const Profile = () => {
                 </Header>
                 <AvatarRow>
                     <AvatarArea>
-                        {userAvatar != '' && userAvatar != null ?
+                        {userAvatar ?
                             <Avatar
                                 source={{
-                                    uri: userAvatar,
+                                    uri: userAvatar.image,
                                 }}
                             /> :
                             <AccountIcon width="236" height="236" fill="#ffffff" />

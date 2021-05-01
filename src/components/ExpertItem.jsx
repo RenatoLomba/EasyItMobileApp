@@ -69,7 +69,7 @@ const ExpertItem = ({ data, service, modalShowDetail, removeAppointment }) => {
     return (
         <Area darkMode={darkMode} onPress={service ? modalShowDetail : handleExpertClick}>
             <Avatar source={{
-                uri: data.avatar
+                uri: data.avatar.image
             }} />
             <InfoArea>
                 <UserName>{data.name}</UserName>

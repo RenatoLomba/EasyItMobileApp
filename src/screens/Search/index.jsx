@@ -30,20 +30,22 @@ const Search = () => {
     const [selectedOrder, setSelectedOrder] = useState('');
     const [services, setServices] = useState([]);
     const [showLoading, setShowLoading] = useState(false);
-    const [take, setTake] = useState(10);
+    // const [take, setTake] = useState(10);
 
     const disponibleOrders = [
         { text: 'Nome', value: 'name' },
         { text: 'Avaliação', value: 'stars' },
-        { text: 'Mais antigos', value: 'olds' }
+        // { text: 'Mais antigos', value: 'olds' }
     ];
 
     const searchServices = async () => {
         setShowLoading(true);
         try {
-            const servicesResult =
-                await Api.searchService(searchText === '' ? ' ' : searchText, take, selectedOrder === '' ? 'default' : selectedOrder);
-            setServices(servicesResult);
+            const servicesResult = searchText.trim() === '' ?
+                await Api.getExperts() : await Api.searchService(searchText.trim());
+            const servicesList = servicesResult && [...servicesResult];
+            // if (selectedOrder === )
+            sortServiceList(servicesList);
         } catch (err) {
             alert(err.message);
         } finally {
@@ -51,12 +53,28 @@ const Search = () => {
         }
     }
 
+    const sortServiceList = (servicesState) => {
+        let serviceList = [...servicesState];
+        if (selectedOrder === 'name') {
+            serviceList = serviceList.sort((a, b) => {
+                if (a.name < b.name) return -1;
+                if (a.name > b.name) return 1;
+                return 0;
+            })
+        }
+        if (selectedOrder === 'stars') {
+            // console.log('stars');
+            serviceList = serviceList.sort((a, b) => a.stars - b.stars);
+        }
+        setServices(serviceList);
+    }
+
     useEffect(() => {
         searchServices();
     }, []);
 
     useEffect(() => {
-        searchServices();
+        sortServiceList(services);
     }, [selectedOrder]);
 
     const handleSearchButton = () => searchServices();
@@ -97,10 +115,10 @@ const Search = () => {
                 <ListArea>
                     {showLoading && <LoadingIcon size="large" color="#fff" />}
                     {services.length > 0 && services.map((service, key) => {
-                        if (key !== 0 && services[key - 1].expertId === service.expertId) {
+                        if (key !== 0 && services[key - 1].id === service.id) {
                             return <View key={key}></View>;
                         }
-                        return <ExpertItem key={`expert__${key}`} data={service.expert} />;
+                        return <ExpertItem key={`expert__${key}`} data={service} />;
                     })}
                 </ListArea>
             </Scroller>

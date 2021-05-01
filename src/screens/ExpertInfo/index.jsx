@@ -69,10 +69,20 @@ export default () => {
     const [selectedService, setSelectedService] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showTestimonialModal, setShowTestimonialModal] = useState(false);
+    const [disableTestimonialButton, setDisableTestimonialButton] = useState(false);
 
-    const [favoriteId, setFavoriteId] = useState('');
-
-    const currentUserTestimonial = userTestimonials.find(u => u.expertId === expertInfo.id);
+    const currentUserTestimonial = () => {
+        const userTests = [...userTestimonials];
+        // console.log(userTests);
+        const testimonialExist = userTests.find(t => {
+            // console.log(t["expert_id"])
+            // console.log(expertInfo.id)
+            return t["expert_id"] === expertInfo.id
+        });
+        // console.log(testimonialExist);
+        if (testimonialExist) return setDisableTestimonialButton(true)
+        setDisableTestimonialButton(false)
+    }
 
     const getExpertCompleteInfo = async () => {
         setShowLoading(true);
@@ -96,13 +106,8 @@ export default () => {
     const isFavorite = async () => {
         setShowLoading(true);
         try {
-            const response = await Api.isFavorite(userId, expertInfo.id);
-            if (response) {
-                setFavoriteId(response.id);
-                setFavorited(response);
-            } else {
-                setFavorited(false);
-            }
+            const response = await Api.isFavorite(expertInfo.id, userId);
+            setFavorited(response);
         } catch (err) {
             alert(err.message);
         } finally {
@@ -113,21 +118,31 @@ export default () => {
     useEffect(() => {
         getExpertCompleteInfo();
         isFavorite();
+        currentUserTestimonial();
     }, []);
 
     const handleFavButton = async () => {
         setShowLoading(true);
         try {
-            const response = favorited ? await Api.removeFavorite(favoriteId) : await Api.addFavorite(userId, expertInfo.id);
+            const response = favorited
+                ? await Api.removeFavorite(expertInfo.id, userId)
+                : await Api.addFavorite(userId, expertInfo.id);
 
             if (response) {
                 let favorites = [...userFavorites];
                 if (response.id) {
+                    response.expert = {
+                        id: expertInfo.id,
+                        name: expertInfo.name,
+                        email: expertInfo.email,
+                        location: expertInfo.location,
+                        stars: expertInfo.stars,
+                        avatar: expertInfo.avatar
+                    }
                     favorites.push(response);
-                    setFavoriteId(response.id);
                 } else {
-                    favorites.splice(favorites.findIndex(v => v.id === favoriteId));
-                    setFavoriteId('');
+                    favorites.splice(favorites
+                        .findIndex(v => v['expert_id'] === expertInfo.id && v['user_id'] === userId));
                 }
 
                 favoritesDispatch(favorites);
@@ -156,7 +171,7 @@ export default () => {
         <Container darkMode={darkMode}>
             <Scroller>
 
-                {expertInfo.photos && expertInfo.photos.length > 0 ?
+                {expertInfo.thumbnails && expertInfo.thumbnails.length > 0 ?
                     <Swiper
                         styles={{ height: 240 }}
                         dot={<SwipeDot color="#fff" />}
@@ -164,11 +179,11 @@ export default () => {
                         paginationStyle={{ top: 15, right: 15, bottom: null, left: null }}
                         autoplay={true}
                     >
-                        {expertInfo.photos.map((photo, key) => {
+                        {expertInfo.thumbnails.map((thumbnail, key) => {
                             return (
                                 <SwipeItem key={`swipe__${key}`}>
                                     <SwipeImage source={{
-                                        uri: photo.url
+                                        uri: thumbnail.image
                                     }} resizeMode="cover" />
                                 </SwipeItem>
                             );
@@ -191,7 +206,7 @@ export default () => {
 
                     <ExpertInfoArea>
                         <ExpertAvatar darkMode={darkMode} source={{
-                            uri: expertInfo.avatar
+                            uri: expertInfo.avatar.image
                         }} />
                         <ExpertInfo>
                             <ExpertNameText darkMode={darkMode}>{expertInfo.name}</ExpertNameText>
@@ -212,7 +227,7 @@ export default () => {
                         <ServicesListArea>
                             <ServiceListAreaTitle darkMode={darkMode}>Lista de serviços</ServiceListAreaTitle>
 
-                            {expertInfo.services.map((service, key) => {
+                            {expertInfo.services.length > 0 && expertInfo.services.map((service, key) => {
                                 return (
                                     <ServiceItem key={key}>
                                         <ServiceInfo>
@@ -234,8 +249,8 @@ export default () => {
 
                     <TestimonialAddButtonArea>
                         <TestimonialAddButton
-                            style={{ opacity: currentUserTestimonial ? 0.5 : 1 }}
-                            disabled={currentUserTestimonial}
+                            style={{ opacity: disableTestimonialButton ? 0.5 : 1 }}
+                            disabled={disableTestimonialButton}
                             onPress={handleTestimonialAddButton}>
                             <TestimonialAddButtonText>Avaliar</TestimonialAddButtonText>
                         </TestimonialAddButton>
@@ -283,6 +298,7 @@ export default () => {
                 setShowModal={setShowTestimonialModal}
                 expertInfo={expertInfo}
                 getExpertCompleteInfo={getExpertCompleteInfo}
+                disableButton={setDisableTestimonialButton}
             />
 
         </Container>

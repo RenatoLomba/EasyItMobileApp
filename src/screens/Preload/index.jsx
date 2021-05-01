@@ -19,13 +19,11 @@ const Preload = () => {
     //CHECK O TOKEN PARA SIGN IN, CASO CONTRÁRIO SIGN UP
     const checkToken = async () => {
         const token = await AsyncStorage.getItem('token');
-        const email = await AsyncStorage.getItem('email');
         if (token) {
             try {
-                const response = await Api.signIn(email, null, true);
+                const response = await Api.loginByToken(token);
                 if (response.token) {
-                    await AsyncStorage.setItem('token', response.token.token);
-                    await AsyncStorage.setItem('email', email);
+                    await AsyncStorage.setItem('token', response.token);
 
                     const mode = await AsyncStorage.getItem('mode');
                     await AsyncStorage.setItem('mode', mode ? mode : 'light');

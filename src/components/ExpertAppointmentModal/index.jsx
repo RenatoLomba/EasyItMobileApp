@@ -2,7 +2,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { UserContext } from '../../contexts/UserContext';
-import { Text } from 'react-native';
+import {
+    Text,
+    Platform,
+    Alert
+} from 'react-native';
 import Api from '../../Api';
 import {
     Modal,
@@ -18,145 +22,99 @@ import {
     ModalServicePrice,
     FinishAppointmentButton,
     FinishAppointmentButtonText,
-    DateInfo,
-    DatePrevButton,
-    DateNextButton,
-    DateTitleArea,
-    DateTitleText,
-    DateList,
-    DateSelectButton,
-    DateWeekDay,
-    DateDay,
-    HourList,
-    HourSelectButton,
-    HourText,
     LoadingRegisteringIcon,
     AppointmentDate,
     AppointmentDateArea,
-    AppointmentDateTitle
+    AppointmentDateTitle,
+    DateSelect,
+    DateSelectButton,
+    DateSelectButtonText,
+    DateText,
+    HourSelect,
+    HourSelectButton,
+    HourSelectButtonText,
+    HourText
 } from './styles';
 import { useNavigation } from '@react-navigation/native';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 
 import ExpandIcon from '../../assets/expand.svg';
-import NavPrevIcon from '../../assets/nav_prev.svg';
-import NavNextIcon from '../../assets/nav_next.svg';
+import TodayIcon from '../../assets/today.svg';
+import ClockIcon from '../../assets/clock.svg';
 
 import configs from '../../appconfigs.json';
-
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+import { format, isBefore } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, appointment = null }) => {
     const { userId, userAppointments, appointmentsDispatch } = useContext(UserContext);
     const navigator = useNavigation();
 
-    const [listDays, setListDays] = useState([]);
-    const [listHours, setListHours] = useState([]);
-
-    const [selectedDay, setSelectedDay] = useState(1);
-    const [selectedMonth, setSelectedMonth] = useState(1);
-    const [selectedYear, setSelectedYear] = useState(1);
-    const [selectedHour, setSelectedHour] = useState(null);
-
-    const [allowEndAppointment, setAllowEndAppointment] = useState(false);
-
+    // const [allowEndAppointment, setAllowEndAppointment] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date().setDate(new Date().getDate() + 1));
+    const [selectedTime, setSelectedTime] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    // const [showTimeSelect, setShowTimeSelect] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
 
-    const [date, hour] = appointment ? appointment.date.split('T') : '';
+    function formatAppointmentDate() {
+        const appointmentDate = new Date(appointment.date);
+        const formattedDate = format(appointmentDate, 'dd/MM', { locale: ptBR })
+        const formattedTime = format(appointmentDate, 'hh:MM', { locale: ptBR })
+        return `${formattedDate} às ${formattedTime}`;
+    }
 
-    const [year, month, day] = appointment ? date.split('-') : [null, null, null];
-    const [hours, minutes, seconds] = appointment ? hour.split(':') : [null, null, null];
+    function handleChangeDate(event, datetime) {
+        if (Platform.OS === 'android') setShowDatePicker(oldState => !oldState)
 
-    useEffect(() => {
-        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-        let newListDays = [];
-        for (var i = 1; i <= daysInMonth; i++) {
-            let day = new Date(selectedYear, selectedMonth - 1, i);
-            let available;
-            if (expertInfo.availableDates && expertInfo.availableDates.length > 0) {
-                available = expertInfo.availableDates.find(avaDate => avaDate.day === i && avaDate.month === selectedMonth && avaDate.year === selectedYear);
-                newListDays.push({
-                    dateInfo: available ? { ...available } : { day: i },
-                    available: available ? true : false,
-                    weekDay: days[day.getDay()],
-                });
-            }
+        if (datetime && isBefore(datetime, new Date())) {
+            setSelectedDate(new Date().setDate(new Date().getDate() + 1))
+            return Alert.alert('Escolha uma data no futuro! 📅')
         }
-        setListDays(newListDays);
-        setSelectedDay(1);
-        setListHours([]);
-        setSelectedHour(null);
-        setAllowEndAppointment(false);
-    }, [selectedMonth, selectedYear]);
 
-    useEffect(() => {
-        selectedHour && setAllowEndAppointment(true);
-    }, [selectedHour]);
+        if (datetime) {
+            setSelectedDate(datetime)
+            // setShowTimeSelect(true)
+        }
+    }
 
-    const handleDateNextPrevButton = (n) => {
-        const mountDate = new Date(selectedYear, selectedMonth - 1, 1);
-        mountDate.setMonth(mountDate.getMonth() + n);
-        setSelectedDay(mountDate.getDate());
-        setSelectedMonth(mountDate.getMonth() + 1);
-        setSelectedYear(mountDate.getFullYear());
-    };
+    function handleChangeTime(event, datetime) {
+        if (Platform.OS === 'android') setShowTimePicker(oldState => !oldState)
 
-    const handleDateSelectButton = (day) => {
-        day.available && setSelectedDay(day.dateInfo.day);
-        setListHours(day.dateInfo.availableHours);
-        setSelectedHour(day.dateInfo.availableHours[0]);
-    };
+        if (datetime) setSelectedTime(datetime)
+    }
 
-    const handleHourSelectButton = (hour) => {
-        setSelectedHour(hour);
-    };
-
-    const handleFinishButton = async () => {
+    async function handleFinishButton() {
         setShowLoading(true);
-        const appointmentDTOCreate = {
-            userid: userId,
-            expertid: expertInfo.id,
-            serviceid: service.id,
-            dateinfo: {
-                day: selectedDay,
-                month: selectedMonth,
-                year: selectedYear,
-                hour: selectedHour.hour,
-                minutes: selectedHour.minutes,
-                availablehourid: selectedHour.id
-            }
+        const date = new Date(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate(),
+            selectedTime.getHours(),
+            selectedTime.getMinutes(),
+            selectedTime.getSeconds(),
+            selectedTime.getMilliseconds()
+        )
+        const appointmentCreate = {
+            expertId: expertInfo.id,
+            userId: userId,
+            serviceId: service.id,
+            date
         }
-
         try {
-            const response = await Api.registerAppointment(appointmentDTOCreate);
-            let appointments = [...userAppointments];
+            const response = await Api.registerAppointment(appointmentCreate);
             if (response.id) {
-                appointments.push(response);
-                alert('Agendamento cadastrado com sucesso!');
-
-                appointmentsDispatch(appointments);
-
-                navigator.reset({
-                    routes: [{ name: 'MainTab' }]
-                });
+                navigator.navigate('Appointments')
             } else {
-                alert(response);
+                Alert.alert(response.error)
             }
-        } catch (e) {
-            alert(e.message);
+        } catch (ex) {
+            Alert.alert('Ops, ocorreu um erro ao realizar agendamento, tente novamente!')
         } finally {
-            setShowLoading(false);
+            setShowLoading(false)
         }
-    };
-
-    useEffect(() => {
-        const today = new Date();
-        setSelectedDay(today.getDate());
-        setSelectedMonth(today.getMonth() + 1);
-        setSelectedYear(today.getFullYear());
-
-        // handleDateNextPrevButton(+1);
-    }, []);
+    }
 
     return (
         <Modal
@@ -173,7 +131,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
                     <ModalItem>
                         <ModalExpertInfo>
-                            <ModalExpertAvatar source={{ uri: expertInfo.avatar }} />
+                            <ModalExpertAvatar source={{ uri: expertInfo.avatar.image }} />
                             <ModalExpertName>{expertInfo.name}</ModalExpertName>
                         </ModalExpertInfo>
                     </ModalItem>
@@ -187,79 +145,61 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
                     {!appointment &&
                         <ModalItem>
-                            <DateInfo>
-                                <DatePrevButton onPress={() => handleDateNextPrevButton(-1)}>
-                                    <NavPrevIcon width="35" height="35" fill="#000" />
-                                </DatePrevButton>
-                                <DateTitleArea>
-                                    <DateTitleText>
-                                        {selectedMonth && selectedYear && `${months[selectedMonth - 1]} ${selectedYear}`}
-                                    </DateTitleText>
-                                </DateTitleArea>
-                                <DateNextButton onPress={() => handleDateNextPrevButton(+1)}>
-                                    <NavNextIcon width="35" height="35" fill="#000" />
-                                </DateNextButton>
-                            </DateInfo>
-                            <DateList
-                                horizontal={true}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                {listDays.map((day, key) => {
-                                    return (
-                                        <DateSelectButton
-                                            style={{
-                                                opacity: !day.available ? 0.5 : 1,
-                                                backgroundColor: day.available && day.dateInfo.day === selectedDay ? "#1ABC9C" : "#FFF",
-                                            }}
-                                            key={key}
-                                            disabled={!day.available}
-                                            onPress={() => handleDateSelectButton(day)}
-                                        >
-                                            <DateWeekDay
-                                                style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
-                                            >
-                                                {day.weekDay}
-                                            </DateWeekDay>
-                                            <DateDay
-                                                style={{ color: day.available && day.dateInfo.day === selectedDay ? "#FFF" : "#000" }}
-                                            >
-                                                {day.dateInfo.day}
-                                            </DateDay>
-                                        </DateSelectButton>
-                                    )
-                                })}
-                            </DateList>
+                            <DateSelect>
+                                <DateText>
+                                    Data: (press to change)
+                                </DateText>
+                                <DateSelectButton
+                                    onPress={() => setShowDatePicker(true)}
+                                >
+                                    <DateSelectButtonText>
+                                        {format(selectedDate, 'dd/MM')}
+                                    </DateSelectButtonText>
+                                    <TodayIcon
+                                        width="28"
+                                        height="28"
+                                        fill={configs.colors['slightly-darker']}
+                                    />
+                                </DateSelectButton>
+                            </DateSelect>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    value={selectedDate}
+                                    mode="date"
+                                    display="calendar"
+                                    onChange={handleChangeDate}
+                                />
+                            )}
                         </ModalItem>
                     }
 
-                    {!appointment && listHours.length > 0 &&
+                    {!appointment && // showTimeSelect &&
                         <ModalItem>
-                            <HourList
-                                horizontal={true}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                {listHours.map((hourItem, key) => {
-                                    return (
-                                        <HourSelectButton
-                                            key={key}
-                                            style={{
-                                                backgroundColor: selectedHour && selectedHour.hour === hourItem.hour && selectedHour.minutes === hourItem.minutes ?
-                                                    configs.colors.primary : "#FFF",
-                                            }}
-                                            onPress={() => handleHourSelectButton(hourItem)}
-                                        >
-                                            <HourText
-                                                style={{
-                                                    color: selectedHour && selectedHour.hour === hourItem.hour && selectedHour.minutes === hourItem.minutes ?
-                                                        "#FFF" : "#000",
-                                                }}
-                                            >
-                                                {`${hourItem.hour} : ${hourItem.minutes === 0 ? '00' : hourItem.minutes}`}
-                                            </HourText>
-                                        </HourSelectButton>
-                                    )
-                                })}
-                            </HourList>
+                            <HourSelect>
+                                <HourText>
+                                    Hora: (press to change)
+                                </HourText>
+                                <HourSelectButton
+                                    onPress={() => setShowTimePicker(true)}
+                                >
+                                    <HourSelectButtonText>
+                                        {format(selectedTime, 'HH:mm')}
+                                    </HourSelectButtonText>
+                                    <ClockIcon
+                                        width="24"
+                                        height="24"
+                                        fill={configs.colors['slightly-darker']}
+                                    />
+                                </HourSelectButton>
+                            </HourSelect>
+                            {showTimePicker && (
+                                <DateTimePicker
+                                    value={selectedTime}
+                                    mode="time"
+                                    display="clock"
+                                    onChange={handleChangeTime}
+                                />
+                            )}
                         </ModalItem>
                     }
 
@@ -268,7 +208,9 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
                             <ModalItem>
                                 <AppointmentDateArea>
                                     <AppointmentDateTitle>Data marcada: </AppointmentDateTitle>
-                                    <AppointmentDate>{`${day}/${month}`} - {`${hours}:${minutes}h`}</AppointmentDate>
+                                    <AppointmentDate>
+                                        {formatAppointmentDate()}
+                                    </AppointmentDate>
                                 </AppointmentDateArea>
                             </ModalItem>
                         )
@@ -278,8 +220,8 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
                     {!appointment &&
                         <FinishAppointmentButton
-                            style={{ opacity: !allowEndAppointment ? 0.5 : 1 }}
-                            disabled={!allowEndAppointment}
+                            // style={{ opacity: !allowEndAppointment ? 0.5 : 1 }}
+                            // disabled={!allowEndAppointment}
                             onPress={handleFinishButton}>
                             <FinishAppointmentButtonText>Finalizar Agendamento</FinishAppointmentButtonText>
                         </FinishAppointmentButton>
@@ -287,7 +229,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
                 </ModalBody>
             </ModalArea>
-        </Modal>
+        </Modal >
     )
 };
 export default ExpertAppointmentModal;

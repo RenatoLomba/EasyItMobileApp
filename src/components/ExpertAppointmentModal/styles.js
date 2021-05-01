@@ -72,66 +72,56 @@ export const FinishAppointmentButtonText = styled.Text`
     font-weight: bold;
 `;
 
-export const DateInfo = styled.View`
+export const DateSelect = styled.View`
+    /* flex: 1; */
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-`;
-export const DatePrevButton = styled.TouchableOpacity`
-    flex-direction: row;
-    justify-content: flex-end;
-    flex: 1;
-`;
-export const DateNextButton = styled.TouchableOpacity`
-    flex-direction: row;
-    flex: 1;
-`;
-export const DateTitleArea = styled.View`
-    flex-direction: row;
-    justify-content: center;
-    flex: 1;
-`;
-export const DateTitleText = styled.Text`
-    color: #000000;
-    font-size: 16px;
-    font-weight: bold;
-`;
-export const DateList = styled.ScrollView`
-    flex-direction: row;
-`;
-export const DateSelectButton = styled.TouchableOpacity`
-    width: 45px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    padding: 5px 0;
-`;
-export const DateWeekDay = styled.Text`
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-`;
-export const DateDay = styled.Text`
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-`;
+`
 
-export const HourList = styled.ScrollView`
-    flex-direction: row;
-`;
-export const HourSelectButton = styled.TouchableOpacity`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    padding: 5px 10px;
-`;
-export const HourText = styled.Text`
-    font-size: 16px;
-    font-weight: bold;
+export const DateText = styled.Text`
     color: #000;
-`;
+    font-size: 14px;
+    font-weight: bold;
+`
+
+export const DateSelectButton = styled.TouchableOpacity`
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+`
+
+export const DateSelectButtonText = styled.Text`
+    color: #737373;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+`
+
+export const HourSelect = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`
+
+export const HourText = styled.Text`
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+`
+
+export const HourSelectButton = styled.TouchableOpacity`
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+`
+
+export const HourSelectButtonText = styled.Text`
+    color: #737373;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+`
 
 export const LoadingRegisteringIcon = styled.ActivityIndicator`
     margin: 16px 0;

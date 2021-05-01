@@ -79,6 +79,8 @@ const Appointments = () => {
         setShowModal(true);
     }
 
+    // console.log(userAppointments);
+
     return (
         <Screen>
             <Scroller>
@@ -100,13 +102,15 @@ const Appointments = () => {
                     })}
                 </ListArea>
 
-                <ExpertAppointmentModal
-                    service={selectedAppointment.service}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    expertInfo={selectedAppointment.expert}
-                    appointment={selectedAppointment}
-                />
+                {selectedAppointment &&
+                    <ExpertAppointmentModal
+                        service={selectedAppointment.service}
+                        showModal={showModal}
+                        setShowModal={setShowModal}
+                        expertInfo={selectedAppointment.expert}
+                        appointment={selectedAppointment}
+                    />
+                }
 
                 {/* {appointmentsList.length > 0 &&
                     appointmentsList.map((appointment, key) => {

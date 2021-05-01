@@ -37,7 +37,7 @@ export const AvatarArea = styled.View`
 export const Avatar = styled.Image`
     width: 236px;
     height: 236px;
-    border-radius: 50%;
+    border-radius: 118px;
 `;
 export const CameraButton = styled.TouchableOpacity`
     width: 32px;

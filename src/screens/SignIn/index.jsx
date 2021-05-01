@@ -50,11 +50,10 @@ const SignIn = () => {
     const loadPage = async () => {
         if (showLoading) {
             try {
-                const hashedPassword = await hashPassword(password);
-                const response = await Api.signIn(email, hashedPassword);
+                // const hashedPassword = await hashPassword(password);
+                const response = await Api.signIn(email, password);
                 if (response.token) {
-                    await AsyncStorage.setItem('token', response.token.token);
-                    await AsyncStorage.setItem('email', email);
+                    await AsyncStorage.setItem('token', response.token);
 
                     const mode = await AsyncStorage.getItem('mode');
                     await AsyncStorage.setItem('mode', mode ? mode : 'light');

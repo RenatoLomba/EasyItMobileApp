@@ -44,6 +44,8 @@ const AvatarIcon = styled.Image`
 const CustomTabBar = ({ state, navigation }) => {
     const { userAvatar, darkMode } = useContext(UserContext);
 
+    // console.log(userAvatar);
+
     const goTo = (screenName) => {
         navigation.navigate(screenName);
     };
@@ -63,10 +65,10 @@ const CustomTabBar = ({ state, navigation }) => {
                 <FavoriteIcon style={{ opacity: state.index === 3 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />
             </TabItem>
             <TabItem onPress={() => goTo("Profile")}>
-                {userAvatar != '' && userAvatar != null ?
+                {userAvatar ?
                     <AvatarIcon
                         source={{
-                            uri: userAvatar,
+                            uri: userAvatar.image,
                         }}
                     /> :
                     <AccountIcon style={{ opacity: state.index === 4 ? 1 : 0.5 }} width="24" height="24" fill="#fff" />

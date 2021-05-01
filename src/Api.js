@@ -1,14 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const BASE_API = 'http://192.168.0.104:5000/api/';
-// 192.168.15.132 --> SEEGER
-// 192.168.0.27 --> OSVALDO
-// 192.168.0.2 --> ANDREIA
-// 192.168.0.104 --> CASA
+const BASE_API = 'https://easyit-api-node.herokuapp.com/';
+// const BASE_API = 'http://localhost:3333/';
 
 class Api {
-    async signIn(email, password, authenticated = false) {
-        const req = await fetch(`${BASE_API}sign/signin?authenticated=${authenticated}`, {
+    async signIn(email, password) {
+        const req = await fetch(`${BASE_API}users/login`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -20,7 +17,7 @@ class Api {
         return json;
     };
     async signUp(name, email, password) {
-        const req = await fetch(`${BASE_API}sign/signup`, {
+        const req = await fetch(`${BASE_API}users`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -31,9 +28,30 @@ class Api {
         const json = await req.json();
         return json;
     };
+    async loginByToken(token) {
+        const req = await fetch(`${BASE_API}users/token`, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            }
+        });
+        const res = await req.json();
+        return res;
+    }
+    async getExperts() {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}experts`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+        const json = await req.json();
+        return json;
+    };
     async getExpertsByLocation(location) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}experts/location/${location}`, {
+        const req = await fetch(`${BASE_API}experts?location=${location}`, {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -44,7 +62,7 @@ class Api {
     };
     async getExpertComplete(id) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}experts/complete/${id}`, {
+        const req = await fetch(`${BASE_API}experts/${id}`, {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -55,7 +73,7 @@ class Api {
     };
     async registerAppointment(appointmentDTOCreate) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}appointments/create`, {
+        const req = await fetch(`${BASE_API}appointments`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -67,9 +85,9 @@ class Api {
         const json = await req.json();
         return json;
     };
-    async searchService(name, qtd, order) {
+    async searchService(name) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}services/name/${name}/${qtd}/${order}`, {
+        const req = await fetch(`${BASE_API}experts/services/${name}`, {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -91,7 +109,7 @@ class Api {
     };
     async addFavorite(userId, expertId) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}favorites/create`, {
+        const req = await fetch(`${BASE_API}favorites`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -103,9 +121,9 @@ class Api {
         const json = await req.json();
         return json;
     };
-    async removeFavorite(id) {
+    async removeFavorite(expertId, userId) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}favorites/delete/${id}`, {
+        const req = await fetch(`${BASE_API}favorites/${expertId}/${userId}`, {
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -114,20 +132,20 @@ class Api {
         const json = await req.json();
         return json;
     };
-    async isFavorite(userId, expertId) {
+    async isFavorite(expertId, userId) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}favorites/findrelation/${userId}/${expertId}`, {
+        const req = await fetch(`${BASE_API}favorites/${expertId}/${userId}`, {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
             },
         });
-        const res = req.status !== 404 ? await req.json() : false;
+        const res = await req.json();
         return res;
     };
     async registerTestimonial(userId, expertId, description, stars) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}testimonials/create`, {
+        const req = await fetch(`${BASE_API}testimonials`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -136,7 +154,7 @@ class Api {
             },
             body: JSON.stringify({userId, expertId, description, stars})
         });
-        const res = req.status === 200 ? await req.json() : await req.text();
+        const res = await req.json();
         return res;
     };
 }

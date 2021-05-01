@@ -32,6 +32,8 @@ const Favorites = () => {
         setShowLoading(false);
     }, [userFavorites]);
 
+    // console.log(favoritesList)
+
     return (
         <Screen>
             <Scroller>
