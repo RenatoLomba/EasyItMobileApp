@@ -105,6 +105,9 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
         try {
             const response = await Api.registerAppointment(appointmentCreate);
             if (response.id) {
+                const newAppointment = { ...response, expert: expertInfo, service }
+                const newUserAppointments = [...userAppointments, newAppointment]
+                appointmentsDispatch(newUserAppointments)
                 navigator.navigate('Appointments')
             } else {
                 Alert.alert(response.error)

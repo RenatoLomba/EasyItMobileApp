@@ -29,17 +29,17 @@ import ExpertAppointmentModal from '../../components/ExpertAppointmentModal';
 
 const Appointments = () => {
     const { userAppointments, appointmentsDispatch } = useContext(UserContext);
-    const [appointmentsList, setAppointmentsList] = useState(userAppointments);
+    // const [appointmentsList, setAppointmentsList] = useState(userAppointments);
     const [showLoading, setShowLoading] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(userAppointments[0]);
     const [showModal, setShowModal] = useState(false);
-    const [appointmentKey, setAppointmentKey] = useState(null);
+    // const [appointmentKey, setAppointmentKey] = useState(null);
 
-    useEffect(() => {
-        setShowLoading(true);
-        setAppointmentsList(userAppointments);
-        setShowLoading(false);
-    }, [userAppointments])
+    // useEffect(() => {
+    //     setShowLoading(true);
+    //     setAppointmentsList(userAppointments);
+    //     setShowLoading(false);
+    // }, [userAppointments])
 
     const removeAppointment = async (id, key) => {
         setShowLoading(true);
@@ -49,7 +49,7 @@ const Appointments = () => {
                 let appointments = [...userAppointments];
                 appointments.splice(appointments.findIndex(v => v.id === id));
 
-                setAppointmentsList(appointments);
+                // setAppointmentsList(appointments);
                 appointmentsDispatch(appointments);
 
                 alert('Agendamento removido com sucesso.');
@@ -91,7 +91,7 @@ const Appointments = () => {
                 {showLoading && <LoadingIcon size="large" color="#fff" />}
 
                 <ListArea>
-                    {appointmentsList.length > 0 && appointmentsList.sort(() => .5 - Math.random()).map((item, key) => {
+                    {userAppointments.length > 0 && userAppointments.sort(() => .5 - Math.random()).map((item, key) => {
                         return <ExpertItem
                             key={`expert__${key}`}
                             data={item.expert}

@@ -98,7 +98,7 @@ class Api {
     };
     async removeAppointment(id) {
         const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}appointments/delete/${id}`, {
+        const req = await fetch(`${BASE_API}appointments/${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + token,

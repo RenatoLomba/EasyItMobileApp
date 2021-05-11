@@ -49,7 +49,7 @@ const Home = () => {
             });
             setLocation(currentLocation[0].region);
 
-            getExperts();
+            getExperts(currentLocation[0].region);
 
         } else {
             alert('Acesso a localização do dispositivo negada');
@@ -61,16 +61,15 @@ const Home = () => {
     // PESQUISAR LOCALIZAÇÃO
     const handleLocationSearch = () => {
         setShowLoading(true);
-        getExperts();
+        getExperts(location);
         setShowLoading(false);
     };
 
     //RETORNA A LISTA DE TÉCNICOS BASEADO NA LOCALIZAÇÃO
-    const getExperts = async () => {
+    const getExperts = async (locationParam = 'São Paulo') => {
         setListExperts([]);
         setShowLoading(true);
         try {
-            const locationParam = location != '' ? location : 'São Paulo';
             const response = await Api.getExpertsByLocation(locationParam);
             // console.log(response);
             if (response.length > 0) {
@@ -89,7 +88,7 @@ const Home = () => {
     // REFRESH DA TELA
     const onRefresh = () => {
         setRefreshing(true);
-        getExperts();
+        getExperts(location.length > 0 ? location : 'São Paulo');
         setRefreshing(false);
     };
 
