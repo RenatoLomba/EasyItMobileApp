@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Modal, useWindowDimensions, Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../contexts/UserContext'
 import PropTypes from 'prop-types'
 import {
@@ -15,7 +16,9 @@ import Api from '../../Api'
 
 const PictureTakeModal = ({ showModal, setShowModal, picture, base64 }) => {
     const windowDimensions = useWindowDimensions()
-    const { userId, avatarDispatch, userName } = useContext(UserContext)
+    const navigator = useNavigation()
+
+    const { userId, avatarDispatch } = useContext(UserContext)
     const [showLoading, setShowLoading] = useState(false)
 
     async function handleConfirmPicture() {
@@ -24,7 +27,14 @@ const PictureTakeModal = ({ showModal, setShowModal, picture, base64 }) => {
             const response = await Api.uploadUserAvatar(userId, picture)
             if (response.id) {
                 avatarDispatch(response)
-                Alert.alert('Sucesso', 'Seu avatar foi salvo com sucesso!!!')
+                Alert.alert('Sucesso', 'Seu avatar foi salvo com sucesso!!!', [
+                    {
+                        text: 'OK', style: 'default', onPress: () => {
+                            setShowModal(false)
+                            navigator.navigate('Profile')
+                        }
+                    }
+                ])
             } else {
                 Alert.alert('Erro!', response.error)
             }
