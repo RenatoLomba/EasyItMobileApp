@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { FileSystem } from 'react-native-unimodules';
 
 const BASE_API = 'https://easyit-api-node.herokuapp.com/';
 // const BASE_API = 'http://localhost:3333/';
@@ -157,6 +158,55 @@ class Api {
         const res = await req.json();
         return res;
     };
+    async uploadUserAvatar(userId, uri) {
+        const token = await AsyncStorage.getItem('token');
+
+        const response = await FileSystem.uploadAsync(`${BASE_API}avatars/user`, uri, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Bearer ' + token,
+            },
+            httpMethod: 'POST',
+            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+            fieldName: 'avatar',
+            parameters: { 'userId': String(userId) }
+        });
+        const json = JSON.parse(response.body);
+        return json;
+    }
+    // async uploadUserAvatar(userId, base64 = '', uri= '') {
+    //     try {
+    //         // const base64string = `data:image/jpg;base64,${base64}`
+
+    //         await FileSystem.deleteAsync(uri)
+    //         // await FileSystem.uploadAsync()
+
+    //         const data = {
+    //             [String(userId)]: {
+    //                 avatar: uri
+    //             }
+    //         }
+
+    //         console.log(data)
+
+    //         await AsyncStorage.setItem(`userAvatar`, JSON.stringify(data))
+    //         return { success: true, data };
+    //     } catch (err) {
+    //         return { error: err.message }
+    //     }
+    // }
+    async getUserAvatar(userId) {
+        try {
+            const data = await AsyncStorage.getItem(`userAvatar`)
+
+            const json = JSON.parse(data)
+
+            return { success: true, data: json[userId] };
+        } catch (err) {
+            return { error: err.message }
+        }
+    }
 }
 
 export default new Api();

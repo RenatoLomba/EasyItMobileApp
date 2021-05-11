@@ -70,7 +70,7 @@ const ExpertAppointmentModal = ({ service, showModal, setShowModal, expertInfo, 
 
         if (datetime && isBefore(datetime, new Date())) {
             setSelectedDate(new Date().setDate(new Date().getDate() + 1))
-            return Alert.alert('Escolha uma data no futuro! 📅')
+            return Alert.alert('Ops...', 'Escolha uma data no futuro! 📅')
         }
 
         if (datetime) {
